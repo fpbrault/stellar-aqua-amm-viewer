@@ -213,7 +213,7 @@ const Rewards: React.FC = () => {
                 </div>
                 <a
                   className="link link-primary"
-                  href="https://github.com/fpbrault/stellar-basic-account-viewer">
+                  href="https://github.com/fpbrault/stellar-aqua-amm-viewer">
                   Source code
                 </a>
               </div>

@@ -58,12 +58,20 @@ const EditableCell = ({
 
 // Be sure to pass our updateMyData and the skipReset option
 function Table({ columns, data, updateMyData }: { columns: any; data: any; updateMyData: any }) {
+  const defaultColumn = React.useMemo(
+    () => ({
+      sortDescFirst: true
+    }),
+    []
+  );
+
   // Use the state and functions returned from useTable to build your UI
   const { getTableProps, getTableBodyProps, headerGroups, footerGroups, prepareRow, rows } =
     useTable(
       {
         columns,
         data,
+        defaultColumn,
         updateMyData
       } as any,
       useGroupBy,
@@ -84,10 +92,10 @@ function Table({ columns, data, updateMyData }: { columns: any; data: any; updat
               {headerGroup.headers.map((column: any) => (
                 <th {...column.getHeaderProps()}>
                   <div>
-                    <span {...column}>
+                    <span {...column.getSortByToggleProps()}>
                       {column.render("Header")}
                       {/* Add a sort direction indicator */}
-                      {column.isSorted ? (column.isSortedDesc ? " 🔽" : " 🔼") : ""}
+                      {column.isSorted ? (!column.isSortedDesc ? " ▲" : " ▼") : ""}
                     </span>
                   </div>
                 </th>
@@ -346,7 +354,9 @@ function RewardsTable(props: { aquaPrice: any; data: any }): React.ReactElement 
 
   return (
     <>
-      <Table columns={columns} data={data} updateMyData={updateMyData} />
+      <div className="overflow-x-auto">
+        <Table columns={columns} data={data} updateMyData={updateMyData} />
+      </div>
     </>
   );
 }

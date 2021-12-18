@@ -2,14 +2,14 @@ import type { NextApiRequest, NextApiResponse } from "next";
 import URI from "urijs";
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse): Promise<void> {
-  const { pools } = JSON.parse(req.body);
+  const pools = req.query.pools as string;
 
   res.setHeader("Cache-Control", "s-maxage=120");
 
-  if (req.method === "POST") {
+  if (req.method === "GET") {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const poolData = await Promise.all(
-      pools.map(async (pool: string) => {
+      JSON.parse(pools).map(async (pool: string) => {
         return {
           id: URI.decode(pool),
           data: await fetch("https://horizon.stellar.org/liquidity_pools?reserves=" + pool, {

@@ -76,7 +76,7 @@ const getPoolIds = async (assets: {
 };
 
 const fetcher2 = async (url: string, body: any) => {
-  const res = await fetch(url, { method: "POST", body: JSON.stringify(body) });
+  const res = await fetch(url + "?pools=" + JSON.stringify(body.pools));
   if (!res.ok) {
     const error = new Error("An error occurred while fetching the data.");
     throw error;
@@ -84,11 +84,14 @@ const fetcher2 = async (url: string, body: any) => {
   return res.json();
 };
 
-const fetcher3 = async (url: string, params: { pools: any; account: any; rewards: any }) => {
-  const data = { pools: params.pools, account: params.account, rewards: params.rewards };
-  fetch(url, { method: "POST", body: JSON.stringify(data) }).then((res) => res.json());
+const fetcher3 = async (url: string, body: any) => {
+  const res = await fetch(url, { method: "POST", body: JSON.stringify(body) });
+  if (!res.ok) {
+    const error = new Error("An error occurred while fetching the data.");
+    throw error;
+  }
+  return res.json();
 };
-
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
 const Rewards: React.FC = () => {
@@ -125,7 +128,7 @@ const Rewards: React.FC = () => {
     };
   }, [account, assets, pools, rewards]);
 
-  const { data: tableInfo } = useSWR(pools ? ["/api/table", tableParams] : null, fetcher2);
+  const { data: tableInfo } = useSWR(pools ? ["/api/table", tableParams] : null, fetcher3);
 
   useEffect(() => {
     if (localStorage) {
@@ -156,42 +159,44 @@ const Rewards: React.FC = () => {
             <h1 className="pt-8 mb-5 text-3xl font-bold text-center sm:text-5xl">
               AMM AQUA rewards viewer
             </h1>
-            <div className="max-w-sm p-2 mx-auto bg-base-300 card bordered">
-              <div className="form-control">
-                <label className="cursor-pointer label">
-                  <span className="w-1/4 label-text">Public Key</span>
-                  <input
-                    type="text"
-                    value={publicKey}
-                    disabled
-                    placeholder="This feature will be back soon..."
-                    className="w-3/4 input input-sm input-primary"
-                    onChange={(event) => setPublicKey(event.currentTarget.value)}
-                  />
-                </label>
-                <label className="cursor-pointer label">
-                  <span className="label-text">Show Details</span>
-                  <input
-                    type="checkbox"
-                    disabled
-                    checked={showDetails}
-                    className="toggle toggle-primary"
-                    onChange={(event) => handleShowDetails(event.currentTarget.checked)}
-                  />
-                </label>
-                <label className="cursor-pointer label">
-                  <span className="label-text">Dark Mode</span>
-                  <input
-                    type="checkbox"
-                    checked={theme === "dark"}
-                    className="toggle toggle-primary"
-                    onChange={(event) =>
-                      handleSetTheme(event.currentTarget.checked ? "dark" : "stellar")
-                    }
-                  />
-                </label>
-              </div>
-              {/*        <button
+            <div className="mx-2">
+              <div className="max-w-md p-2 mx-auto bg-base-300 card bordered">
+                <div className="form-control">
+                  <label className="cursor-pointer label">
+                    <span className="w-1/4 label-text">Public Key</span>
+
+                    <input
+                      type="text"
+                      value={publicKey}
+                      disabled
+                      placeholder="This feature will be back soon..."
+                      className="w-3/4 input input-sm input-primary"
+                      onChange={(event) => setPublicKey(event.currentTarget.value)}
+                    />
+                  </label>
+                  <label className="cursor-pointer label">
+                    <span className="label-text">Show Details</span>
+                    <input
+                      type="checkbox"
+                      disabled
+                      checked={showDetails}
+                      className="toggle toggle-primary"
+                      onChange={(event) => handleShowDetails(event.currentTarget.checked)}
+                    />
+                  </label>
+                  <label className="cursor-pointer label">
+                    <span className="label-text">Dark Mode</span>
+                    <input
+                      type="checkbox"
+                      checked={theme === "dark"}
+                      className="toggle toggle-primary"
+                      onChange={(event) =>
+                        handleSetTheme(event.currentTarget.checked ? "dark" : "stellar")
+                      }
+                    />
+                  </label>
+                </div>
+                {/*        <button
                 className="py-2 btn btn-md btn-primary"
                 onClick={() => {
                   handleRefreshData();
@@ -199,16 +204,17 @@ const Rewards: React.FC = () => {
                 Refresh
               </button> */}
 
-              <div className="text-center text-2xs">
-                <div>
-                  {"If you like this tool, please consider sending a tip: "}
-                  GDVLJKTGQGI5NXD5D2VBQZVQ5YVX7MJ7UHKPW6INEAHI4PKYDUT77KCS
+                <div className="text-center break-words text-2xs">
+                  <div className="">
+                    {"If you like this tool, please consider sending a tip: "}
+                    GDVLJKTGQGI5NXD5D2VBQZVQ5YVX7MJ7UHKPW6INEAHI4PKYDUT77KCS
+                  </div>
+                  <a
+                    className="link link-primary"
+                    href="https://github.com/fpbrault/stellar-aqua-amm-viewer">
+                    Source code
+                  </a>
                 </div>
-                <a
-                  className="link link-primary"
-                  href="https://github.com/fpbrault/stellar-aqua-amm-viewer">
-                  Source code
-                </a>
               </div>
             </div>
 

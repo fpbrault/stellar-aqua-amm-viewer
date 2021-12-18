@@ -40,9 +40,7 @@ const PoolRow: React.FC<poolProps> = (props) => {
     asset2 = props.reward.market_key.asset2_code + "%3A" + props.reward.market_key.asset2_issuer;
   }
 
-  const { data: pool, error } = useGetData(
-    "https://horizon.stellar.org/liquidity_pools?reserves=" + asset1 + "%2C" + asset2
-  );
+  const { data: pool, error } = useGetData("/api/pools/?pool=" + asset1 + "%2C" + asset2);
 
   const poolValue = pool
     ? pool._embedded.records[0].reserves[0].amount * 2 * (props.assetValue ? props.assetValue : 0)

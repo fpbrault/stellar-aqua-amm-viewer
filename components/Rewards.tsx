@@ -4,6 +4,8 @@ import React, { useCallback, useEffect, useMemo, useState } from "react";
 import useSWR from "swr";
 import { useGetData } from "../lib/useRequest";
 import RewardsTable from "./Table";
+import ReactPlaceholder from "react-placeholder";
+import "react-placeholder/lib/reactPlaceholder.css";
 
 type AssetReward = {
   data: {
@@ -219,16 +221,24 @@ const Rewards: React.FC = () => {
             </div>
 
             <div className="flex justify-center pt-4 pb-8 mx-2">
-              {tableInfo && assets && (
-                <RewardsTable
-                  data={tableInfo}
-                  aquaPrice={
-                    assets.assets.find(
-                      (asset: { id: string }) =>
-                        asset.id === "AQUA-GBNZILSTVQZ4R7IKQDGHYGY2QXL5QOFJYQMXPKWRRM5PAV7Y4M67AQUA"
-                    ).price_USD
-                  }></RewardsTable>
-              )}
+              <ReactPlaceholder
+                showLoadingAnimation
+                className="w-3/4"
+                type="media"
+                rows={30}
+                ready={tableInfo && assets}>
+                {tableInfo && assets && (
+                  <RewardsTable
+                    data={tableInfo}
+                    aquaPrice={
+                      assets.assets.find(
+                        (asset: { id: string }) =>
+                          asset.id ===
+                          "AQUA-GBNZILSTVQZ4R7IKQDGHYGY2QXL5QOFJYQMXPKWRRM5PAV7Y4M67AQUA"
+                      ).price_USD
+                    }></RewardsTable>
+                )}
+              </ReactPlaceholder>
             </div>
           </div>
         </div>

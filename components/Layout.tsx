@@ -45,11 +45,6 @@ const Layout: React.FC<Props> = (props) => (
       <link rel="apple-touch-icon" href="/apple-icon.png"></link>
       <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" />
       <meta name="theme-color" content="#317EFB" />
-      <link
-        href="https://cdn.jsdelivr.net/npm/daisyui@1.10.0/dist/themes.css"
-        rel="stylesheet"
-        type="text/css"
-      />
     </Head>
     <div className="flex flex-col text-neutral bg-base-200">
       <div className="min-h-screen pt-0">{props.children}</div>

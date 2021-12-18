@@ -218,7 +218,7 @@ const Rewards: React.FC = () => {
               </div>
             </div>
 
-            <div className="flex justify-center pt-4 mx-2">
+            <div className="flex justify-center pt-4 pb-8 mx-2">
               {tableInfo && assets && (
                 <RewardsTable
                   data={tableInfo}

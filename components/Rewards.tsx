@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable no-unused-vars */
 import React, { useCallback, useEffect, useMemo, useState } from "react";
-import useSWR from "swr";
+import useSWR, { mutate } from "swr";
 import { useGetData } from "../lib/useRequest";
 import RewardsTable from "./Table";
 import ReactPlaceholder from "react-placeholder";
@@ -108,7 +108,8 @@ const Rewards: React.FC = () => {
 
   const { data: account } = useSWR(
     publicKey.length === 56 ? "https://horizon.stellar.org/accounts/" + publicKey : null,
-    fetcher
+    fetcher,
+    { revalidateOnFocus: false }
   );
 
   const { data: assets, error } = useGetData("/api/assets");
@@ -119,7 +120,9 @@ const Rewards: React.FC = () => {
     return { assets: poolIds && poolIds };
   }, [rewards]);
 
-  const { data: pools } = useSWR(poolIds ? ["/api/pools", { pools: poolIds }] : null, fetcher2);
+  const { data: pools } = useSWR(poolIds ? ["/api/pools", { pools: poolIds }] : null, fetcher2, {
+    revalidateOnFocus: false
+  });
 
   const tableParams = useMemo(() => {
     return {
@@ -130,7 +133,9 @@ const Rewards: React.FC = () => {
     };
   }, [account, assets, pools, rewards]);
 
-  const { data: tableInfo } = useSWR(pools ? ["/api/table", tableParams] : null, fetcher3);
+  const { data: tableInfo } = useSWR(pools ? ["/api/table", tableParams] : null, fetcher3, {
+    revalidateOnFocus: false
+  });
 
   useEffect(() => {
     if (localStorage) {
@@ -149,6 +154,10 @@ const Rewards: React.FC = () => {
   function handleShowDetails(showDetails: boolean) {
     setShowDetails(showDetails);
     localStorage.setItem("showDetails", JSON.stringify(showDetails));
+  }
+
+  function handleRefreshData() {
+    mutate(poolIds ? ["/api/pools", { pools: poolIds }] : null, false);
   }
 
   if (rewardsError || error) return <div>ERROR</div>;
@@ -176,16 +185,15 @@ const Rewards: React.FC = () => {
                       onChange={(event) => setPublicKey(event.currentTarget.value)}
                     />
                   </label>
-                  <label className="cursor-pointer label">
+                  {/*  <label className="cursor-pointer label">
                     <span className="label-text">Show Details</span>
                     <input
                       type="checkbox"
-                      disabled
                       checked={showDetails}
                       className="toggle toggle-primary"
                       onChange={(event) => handleShowDetails(event.currentTarget.checked)}
                     />
-                  </label>
+                  </label> */}
                   <label className="cursor-pointer label">
                     <span className="label-text">Dark Mode</span>
                     <input
@@ -198,13 +206,13 @@ const Rewards: React.FC = () => {
                     />
                   </label>
                 </div>
-                {/*        <button
-                className="py-2 btn btn-md btn-primary"
-                onClick={() => {
-                  handleRefreshData();
-                }}>
-                Refresh
-              </button> */}
+                <button
+                  className="py-2 btn btn-md btn-primary"
+                  onClick={() => {
+                    handleRefreshData();
+                  }}>
+                  Refresh
+                </button>
 
                 <div className="text-center break-words text-2xs">
                   <div className="">
@@ -223,21 +231,23 @@ const Rewards: React.FC = () => {
             <div className="flex justify-center pt-4 pb-8 mx-2">
               <ReactPlaceholder
                 showLoadingAnimation
-                className="w-3/4"
-                type="media"
+                className="max-w-6xl"
                 rows={30}
+                type="text"
                 ready={tableInfo && assets}>
-                {tableInfo && assets && (
-                  <RewardsTable
-                    data={tableInfo}
-                    aquaPrice={
-                      assets.assets.find(
-                        (asset: { id: string }) =>
-                          asset.id ===
-                          "AQUA-GBNZILSTVQZ4R7IKQDGHYGY2QXL5QOFJYQMXPKWRRM5PAV7Y4M67AQUA"
-                      ).price_USD
-                    }></RewardsTable>
-                )}
+                <>
+                  {tableInfo && assets && (
+                    <RewardsTable
+                      data={tableInfo}
+                      aquaPrice={
+                        assets.assets.find(
+                          (asset: { id: string }) =>
+                            asset.id ===
+                            "AQUA-GBNZILSTVQZ4R7IKQDGHYGY2QXL5QOFJYQMXPKWRRM5PAV7Y4M67AQUA"
+                        ).price_USD
+                      }></RewardsTable>
+                  )}{" "}
+                </>
               </ReactPlaceholder>
             </div>
           </div>

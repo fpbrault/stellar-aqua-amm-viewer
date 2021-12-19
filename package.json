@@ -11,20 +11,15 @@
     "release": "standard-version"
   },
   "dependencies": {
-    "@emotion/react": "^11.7.1",
-    "@emotion/styled": "^11.6.0",
-    "@stellar/freighter-api": "^1.1.2",
     "daisyui": "1.16.6",
     "next": "12.0.7",
-    "next-auth": "4.0.5",
     "react": "17.0.2",
     "react-currency-input-field": "^3.6.0",
     "react-dom": "17.0.2",
     "react-placeholder": "^4.1.0",
     "react-table": "^7.7.0",
     "swr": "^1.1.1",
-    "urijs": "^1.19.7",
-    "use-async-effect": "^2.2.3"
+    "urijs": "^1.19.7"
   },
   "devDependencies": {
     "@types/react": "17.0.37",
@@ -64,13 +59,6 @@
   "config": {
     "commitizen": {
       "path": "git-cz"
-    },
-    "standard-version": {
-      "skip": {
-        "bump": true,
-        "commit": true,
-        "tag": true
-      }
     }
   }
 }

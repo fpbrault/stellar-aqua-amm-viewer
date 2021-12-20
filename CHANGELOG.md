@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.1.1](https://github.com/fpbrault/stellar-aqua-amm-viewer/compare/v0.1.0...v0.1.1) (2021-12-20)
+
+
+### Features
+
+* 🎸 adds balance retrieval from pubkey and albedo ([87a9f48](https://github.com/fpbrault/stellar-aqua-amm-viewer/commit/87a9f48eb1e6b56f686c7b0e4c8a8e8affe2a8e6))
+* 🎸 adds changelog modal for new releases ([0afd536](https://github.com/fpbrault/stellar-aqua-amm-viewer/commit/0afd53623efe0e5abddb2d1d76ab2e170a66594f))
+
 ## 0.1.0 (2021-12-19)
 
 

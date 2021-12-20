@@ -1,52 +1,25 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable no-unused-vars */
-import React, { useCallback, useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import useSWR, { mutate } from "swr";
 import { useGetData } from "../lib/useRequest";
 import RewardsTable from "./Table";
 import ReactPlaceholder from "react-placeholder";
 import "react-placeholder/lib/reactPlaceholder.css";
+import * as wallet from "../lib/wallet";
+import Image from "next/image";
+import { LIB_VERSION } from "../version";
 
-type AssetReward = {
-  data: {
-    amount: number;
-    daily_amm_reward: number;
-    daily_sdex_reward: number;
-    daily_total_reward: number;
-    last_updated: Date;
+const getPoolIds = async (
+  assets: {
     market_key: {
+      asset1_issuer: string | null;
       asset1_code: string;
-      asset1_issuer: string;
+      asset2_issuer: string | null;
       asset2_code: string;
-      asset2_issuer: string;
     };
-  };
-  rewardPerDollar: number;
-};
-
-const getPoolIds = async (assets: {
-  map: (
-    arg0: (asset: {
-      market_key: {
-        asset1_issuer: string | null;
-        asset1_code: string;
-        asset2_issuer: string | null;
-        asset2_code: string;
-      };
-    }) => Promise<string>
-  ) => readonly [
-    unknown,
-    unknown,
-    unknown,
-    unknown,
-    unknown,
-    unknown,
-    unknown,
-    unknown,
-    unknown,
-    unknown
-  ];
-}) => {
+  }[]
+) => {
   const results = await Promise.all(
     assets.map(
       async (asset: {
@@ -97,11 +70,12 @@ const fetcher3 = async (url: string, body: any) => {
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
 const Rewards: React.FC = () => {
-  const [showDetails, setShowDetails] = useState(false);
   const [publicKey, setPublicKey] = useState("");
-  const [firstLoad, setFirstload] = useState(true);
+  const [version, setVersion] = useState("0.0.0");
+  const [showLatestChanges, setShowLatestChanges] = useState(false);
   const [poolIds, setPoolIds] = useState();
   const [theme, setTheme] = useState("stellar");
+
   const connected = async (pubKey: string) => {
     setPublicKey(pubKey);
     handleRefreshData();
@@ -143,20 +117,28 @@ const Rewards: React.FC = () => {
   useEffect(() => {
     if (localStorage) {
       const getTheme = localStorage.getItem("theme");
-      const getDetails = localStorage.getItem("showDetails");
+      const getVersion = localStorage.getItem("version");
 
       setTheme(getTheme ? JSON.parse(getTheme) : "stellar");
-      setShowDetails(getDetails ? JSON.parse(getDetails) : false);
+      setVersion(getVersion ? JSON.parse(getVersion) : "0.0.0");
     }
   }, []);
+
+  useEffect(() => {
+    if (version !== LIB_VERSION) {
+      setShowLatestChanges(true);
+    } else {
+      setShowLatestChanges(false);
+    }
+  }, [version]);
 
   function handleSetTheme(theme: string) {
     setTheme(theme);
     localStorage.setItem("theme", JSON.stringify(theme));
   }
-  function handleShowDetails(showDetails: boolean) {
-    setShowDetails(showDetails);
-    localStorage.setItem("showDetails", JSON.stringify(showDetails));
+  function handleSetVersion() {
+    setVersion(LIB_VERSION);
+    localStorage.setItem("version", JSON.stringify(LIB_VERSION));
   }
 
   function handleRefreshData() {
@@ -167,6 +149,30 @@ const Rewards: React.FC = () => {
 
   return (
     <div data-theme={theme} className="flex flex-col text-base-content bg-base-content">
+      <input
+        type="checkbox"
+        defaultChecked={showLatestChanges}
+        id="my-modal-2"
+        className="modal-toggle"
+      />
+
+      <div className="modal">
+        <div className="modal-box">
+          <div className="mb-4 text-3xl font-bold">
+            {"Version " + LIB_VERSION + " - What's new:"}
+          </div>
+          <ul className="px-4 list-disc">
+            <li>Added changelog modal window (only shown once per new version)</li>
+            <li>Values invested can be retrieved using Public Key</li>
+            <li>Added Albedo wallet support</li>
+          </ul>
+          <div className="modal-action">
+            <button tabIndex={0} className="btn" onClick={() => handleSetVersion()}>
+              Close
+            </button>
+          </div>
+        </div>
+      </div>
       <div className="min-h-screen pt-0 ">
         <div className="flex flex-col justify-center w-full ">
           <div className="w-full min-h-screen mx-auto shadow-2xl bg-base-100">
@@ -176,6 +182,17 @@ const Rewards: React.FC = () => {
             <div className="mx-2">
               <div className="max-w-md p-2 mx-auto bg-base-300 card bordered">
                 <div className="form-control">
+                  <label className="cursor-pointer label">
+                    <span className="label-text">Dark Mode</span>
+                    <input
+                      type="checkbox"
+                      checked={theme === "dark"}
+                      className="toggle toggle-primary"
+                      onChange={(event) =>
+                        handleSetTheme(event.currentTarget.checked ? "dark" : "stellar")
+                      }
+                    />
+                  </label>
                   <label className="cursor-pointer label">
                     <span className="w-1/4 label-text">Public Key</span>
 
@@ -236,27 +253,16 @@ const Rewards: React.FC = () => {
                       onChange={(event) => handleShowDetails(event.currentTarget.checked)}
                     />
                   </label> */}
-                  <label className="cursor-pointer label">
-                    <span className="label-text">Dark Mode</span>
-                    <input
-                      type="checkbox"
-                      checked={theme === "dark"}
-                      className="toggle toggle-primary"
-                      onChange={(event) =>
-                        handleSetTheme(event.currentTarget.checked ? "dark" : "stellar")
-                      }
-                    />
-                  </label>
+                  <button
+                    className="max-w-xs py-2 mx-auto btn btn-md btn-primary btn-block btn-outline"
+                    onClick={() => {
+                      handleRefreshData();
+                    }}>
+                    Refresh
+                  </button>
                 </div>
-                <button
-                  className="py-2 btn btn-md btn-primary"
-                  onClick={() => {
-                    handleRefreshData();
-                  }}>
-                  Refresh
-                </button>
 
-                <div className="text-center break-words text-2xs">
+                <div className="pt-4 text-center break-words text-2xs">
                   <div className="">
                     {"If you like this tool, please consider sending a tip: "}
                     GDVLJKTGQGI5NXD5D2VBQZVQ5YVX7MJ7UHKPW6INEAHI4PKYDUT77KCS

@@ -4,7 +4,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   res.setHeader("Cache-Control", "s-maxage=120");
 
   const { pool } = req.query;
-  console.log(pool);
 
   if (req.method === "GET") {
     const result = await fetch("https://horizon.stellar.org/liquidity_pools?reserves=" + pool, {

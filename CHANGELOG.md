@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.1.2](https://github.com/fpbrault/stellar-aqua-amm-viewer/compare/v0.1.1...v0.1.2) (2021-12-20)
+
+
+### Bug Fixes
+
+* 🐛 fixes aquaPrice build failure ([3a08ff6](https://github.com/fpbrault/stellar-aqua-amm-viewer/commit/3a08ff648db38f04c5b8154ea7db05f94770570c))
+
 ### [0.1.1](https://github.com/fpbrault/stellar-aqua-amm-viewer/compare/v0.1.0...v0.1.1) (2021-12-20)
 
 

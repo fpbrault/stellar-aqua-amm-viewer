@@ -86,11 +86,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         let rewardPerHour = 0;
         let rewardPerHourUsd = 0;
 
-        let aquaPrice = assets.find(
-          (asset: { id: string }) =>
-            asset.id === "AQUA-GBNZILSTVQZ4R7IKQDGHYGY2QXL5QOFJYQMXPKWRRM5PAV7Y4M67AQUA"
-        ).price_USD;
-
         if (account) {
           const poolFromAccount = account.balances.find(
             (balance: { liquidity_pool_id: string }) => balance.liquidity_pool_id === poolId

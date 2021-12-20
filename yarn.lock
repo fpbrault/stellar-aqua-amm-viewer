@@ -2,6 +2,19 @@
 # yarn lockfile v1
 
 
+"@albedo-link/intent@^0.11.2":
+  version "0.11.2"
+  resolved "https://registry.yarnpkg.com/@albedo-link/intent/-/intent-0.11.2.tgz#af1e8cb2556a846712c87fdd9c0eb21705f177a0"
+  integrity sha512-RBlbP79zFhboPoHplsiPW4/FsYEvw58Nnz5CQMm8peNCGmWgx5dIiFDmqcgGY5KEbmMGlRTGEFn+XAyka9L9ig==
+
+"@albedo-link/signature-verification@^0.1.2":
+  version "0.1.2"
+  resolved "https://registry.yarnpkg.com/@albedo-link/signature-verification/-/signature-verification-0.1.2.tgz#f6c1c1205f7a728143e88e0a092ed26c9bdc7375"
+  integrity sha512-sIH+5FskulnqyQ5MfEcR1jMt7XLao9L0HvLYud6+hDcyeo/+0R8iK6XjFHT9fmHsy7HIWPiqD6vex4GZrk2sKA==
+  dependencies:
+    sha.js ">=2.x"
+    tweetnacl "^1.0.3"
+
 "@babel/code-frame@7.12.11":
   version "7.12.11"
   resolved "https://registry.yarnpkg.com/@babel/code-frame/-/code-frame-7.12.11.tgz#f4ad435aa263db935b8f10f2c552d23fb716a63f"
@@ -3883,7 +3896,7 @@ setprototypeof@1.1.1:
   resolved "https://registry.yarnpkg.com/setprototypeof/-/setprototypeof-1.1.1.tgz#7e95acb24aa92f5885e0abef5ba131330d4ae683"
   integrity sha512-JvdAWfbXeIGaZ9cILp38HntZSFSo3mWg6xGcJJsd+d4aRMOqauag1C63dJfDw7OaMYwEbHMOxEZ1lqVRYP2OAw==
 
-sha.js@^2.4.0, sha.js@^2.4.8:
+sha.js@>=2.x, sha.js@^2.4.0, sha.js@^2.4.8:
   version "2.4.11"
   resolved "https://registry.yarnpkg.com/sha.js/-/sha.js-2.4.11.tgz#37a5cf0b81ecbc6943de109ba2960d1b26584ae7"
   integrity sha512-QMEp5B7cftE7APOjk5Y6xgrbWu+WkLVQwk8JNjZ8nKRciZaByEW6MubieAiToS7+dwvrjGhH8jRXz3MVd0AYqQ==
@@ -4384,6 +4397,11 @@ tty-browserify@0.0.1:
   version "0.0.1"
   resolved "https://registry.yarnpkg.com/tty-browserify/-/tty-browserify-0.0.1.tgz#3f05251ee17904dfd0677546670db9651682b811"
   integrity sha512-C3TaO7K81YvjCgQH9Q1S3R3P3BtN3RIM8n+OvX4il1K1zgE8ZhI0op7kClgkxtutIE8hQrcrHBXvIheqKUUCxw==
+
+tweetnacl@^1.0.3:
+  version "1.0.3"
+  resolved "https://registry.yarnpkg.com/tweetnacl/-/tweetnacl-1.0.3.tgz#ac0af71680458d8a6378d0d0d050ab1407d35596"
+  integrity sha512-6rt+RN7aOi1nGMyC4Xa5DdYiukl2UWCbcJft7YhxReBGQD7OAM8Pbxw6YMo4r2diNEA8FEmu32YOn9rhaiE5yw==
 
 type-check@^0.4.0, type-check@~0.4.0:
   version "0.4.0"

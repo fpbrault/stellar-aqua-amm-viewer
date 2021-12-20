@@ -1,7 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse): Promise<void> {
-  const { pools, rewards, assets } = JSON.parse(req.body);
+  const { pools, rewards, assets, account } = JSON.parse(req.body);
 
   type Response = {
     poolId: string;
@@ -67,6 +67,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         const pool = pools.find((pool: { id: string }) => pool.id === pairId);
         const poolId = pool?.data.id;
         const totalShares = pool?.data.total_shares;
+
         const dailyReward = rewardAsset.daily_amm_reward;
 
         const asset1_value = assets.find(
@@ -78,6 +79,30 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         const rewardPerDollar = asset1_value
           ? dailyReward / 24 / (pool?.data.reserves[0].amount * 2 * (asset1_value ?? 0))
           : 0;
+        const valuePerShare = poolValue / pool?.data.total_shares;
+
+        let totalValueInvested = 0;
+        let myShares = 0;
+        let rewardPerHour = 0;
+        let rewardPerHourUsd = 0;
+
+        let aquaPrice = assets.find(
+          (asset: { id: string }) =>
+            asset.id === "AQUA-GBNZILSTVQZ4R7IKQDGHYGY2QXL5QOFJYQMXPKWRRM5PAV7Y4M67AQUA"
+        ).price_USD;
+
+        if (account) {
+          const poolFromAccount = account.balances.find(
+            (balance: { liquidity_pool_id: string }) => balance.liquidity_pool_id === poolId
+          );
+
+          if (poolFromAccount) {
+            totalValueInvested = parseFloat((poolFromAccount?.balance * valuePerShare).toFixed(2));
+            myShares = poolFromAccount?.balance;
+            rewardPerHour = rewardPerDollar * totalValueInvested;
+            rewardPerHourUsd = parseFloat((rewardPerDollar * totalValueInvested).toFixed(2));
+          }
+        }
 
         return {
           poolId: poolId,
@@ -89,11 +114,11 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
           dailyReward: dailyReward,
           rewardPerDollar: parseFloat(rewardPerDollar.toFixed(5)),
           rewardPerDollarPerDay: parseFloat((rewardPerDollar * 24).toFixed(2)),
-          rewardPerHour: 0,
-          rewardPerHourUSD: 0,
-          rewardPerDayUSD: 0,
-          totalValueInvested: 0,
-          myShares: 0
+          rewardPerHour: rewardPerHour,
+          rewardPerHourUSD: rewardPerHourUsd,
+          rewardPerDayUSD: rewardPerHourUsd * 24,
+          totalValueInvested: totalValueInvested,
+          myShares: myShares
         };
       })
     );

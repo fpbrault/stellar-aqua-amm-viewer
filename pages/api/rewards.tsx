@@ -40,9 +40,11 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         });
 
       const rewardAssetsList = votes.results
-        .filter((vote) => vote.votes_value >= rewardThreshold)
-        .map((vote) => vote.market_key);
-      const rewardAssets = votes.results.filter((vote) => vote.votes_value >= rewardThreshold);
+        .filter((vote: { votes_value: number }) => vote.votes_value >= rewardThreshold)
+        .map((vote: { market_key: any }) => vote.market_key);
+      const rewardAssets = votes.results.filter(
+        (vote: { votes_value: number }) => vote.votes_value >= rewardThreshold
+      );
 
       const futureRewards = await fetch(
         "https://marketkeys-tracker.aqua.network/api/market-keys/?account_id=" +
@@ -62,27 +64,37 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
           console.error(error);
         });
 
-      const processedFutureRewards = futureRewards.results.map((asset) => {
-        const reward = rewardAssets.find((key) => key.market_key === asset.account_id);
-        return {
-          market_key: {
-            asset1_code: asset.asset1_code,
-            asset1_issuer: asset.asset1_issuer,
-            asset2_code: asset.asset2_code,
-            asset2_issuer: asset.asset2_issuer
-          },
-          daily_sdex_reward: parseFloat(
-            ((reward.votes_value / stats.votes_value_sum) * 2000000).toFixed(0)
-          ),
-          daily_amm_reward: parseFloat(
-            ((reward.votes_value / stats.votes_value_sum) * 5000000).toFixed(0)
-          ),
-          daily_total_reward: parseFloat(
-            ((reward.votes_value / stats.votes_value_sum) * 7000000).toFixed(0)
-          ),
-          last_updated: reward.timestamp
-        };
-      });
+      const processedFutureRewards = futureRewards.results.map(
+        (asset: {
+          account_id: any;
+          asset1_code: any;
+          asset1_issuer: any;
+          asset2_code: any;
+          asset2_issuer: any;
+        }) => {
+          const reward = rewardAssets.find(
+            (key: { market_key: any }) => key.market_key === asset.account_id
+          );
+          return {
+            market_key: {
+              asset1_code: asset.asset1_code,
+              asset1_issuer: asset.asset1_issuer,
+              asset2_code: asset.asset2_code,
+              asset2_issuer: asset.asset2_issuer
+            },
+            daily_sdex_reward: parseFloat(
+              ((reward.votes_value / stats.votes_value_sum) * 2000000).toFixed(0)
+            ),
+            daily_amm_reward: parseFloat(
+              ((reward.votes_value / stats.votes_value_sum) * 5000000).toFixed(0)
+            ),
+            daily_total_reward: parseFloat(
+              ((reward.votes_value / stats.votes_value_sum) * 7000000).toFixed(0)
+            ),
+            last_updated: reward.timestamp
+          };
+        }
+      );
       res.status(200);
       res.json(processedFutureRewards);
     } else {

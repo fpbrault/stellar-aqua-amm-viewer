@@ -155,10 +155,6 @@ const Rewards: React.FC = () => {
   }
 
   function handleRefreshData() {
-    mutate(
-      publicKey.length === 56 ? "https://horizon.stellar.org/accounts/" + publicKey : null,
-      false
-    );
     mutate(poolIds ? ["/api/pools", { pools: poolIds }] : null, false);
   }
 

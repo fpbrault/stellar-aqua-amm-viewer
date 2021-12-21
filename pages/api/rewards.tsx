@@ -41,10 +41,14 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
       const rewardAssetsList = votes.results
         .filter((vote: { votes_value: number }) => vote.votes_value >= rewardThreshold)
-        .map((vote: { market_key: any }) => vote.market_key);
+        .map((vote: { market_key: string }) => vote.market_key);
       const rewardAssets = votes.results.filter(
         (vote: { votes_value: number }) => vote.votes_value >= rewardThreshold
       );
+
+      const totalEligibleVotes = rewardAssets
+        .map((rewardAsset: { votes_value: string }) => parseFloat(rewardAsset.votes_value))
+        .reduce((a: number, b: number) => a + b, 0);
 
       const futureRewards = await fetch(
         "https://marketkeys-tracker.aqua.network/api/market-keys/?account_id=" +
@@ -66,14 +70,14 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
       const processedFutureRewards = futureRewards.results.map(
         (asset: {
-          account_id: any;
-          asset1_code: any;
-          asset1_issuer: any;
-          asset2_code: any;
-          asset2_issuer: any;
+          account_id: string;
+          asset1_code: string;
+          asset1_issuer: string;
+          asset2_code: string;
+          asset2_issuer: string;
         }) => {
           const reward = rewardAssets.find(
-            (key: { market_key: any }) => key.market_key === asset.account_id
+            (key: { market_key: string }) => key.market_key === asset.account_id
           );
           return {
             market_key: {
@@ -83,13 +87,13 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
               asset2_issuer: asset.asset2_issuer
             },
             daily_sdex_reward: parseFloat(
-              ((reward.votes_value / stats.votes_value_sum) * 2000000).toFixed(0)
+              ((reward.votes_value / totalEligibleVotes) * 2000000).toFixed(0)
             ),
             daily_amm_reward: parseFloat(
-              ((reward.votes_value / stats.votes_value_sum) * 5000000).toFixed(0)
+              ((reward.votes_value / totalEligibleVotes) * 5000000).toFixed(0)
             ),
             daily_total_reward: parseFloat(
-              ((reward.votes_value / stats.votes_value_sum) * 7000000).toFixed(0)
+              ((reward.votes_value / totalEligibleVotes) * 7000000).toFixed(0)
             ),
             last_updated: reward.timestamp
           };

@@ -310,7 +310,7 @@ const Rewards: React.FC = () => {
                   {tableInfo && assets && (
                     <div
                       className={
-                        "p-2 border rounded-lg shadow-sm bg-base-200 " +
+                        "overflow-x-auto p-2 border rounded-lg shadow-sm bg-base-200 " +
                         (showFutureRewards ? " bg-orange-500" : null)
                       }>
                       {showFutureRewards && (

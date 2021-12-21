@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.2.3](https://github.com/fpbrault/stellar-aqua-amm-viewer/compare/v0.2.2...v0.2.3) (2021-12-21)
+
+
+### Bug Fixes
+
+* 🐛 fixes rewards values not updating on toggle ([be0ca05](https://github.com/fpbrault/stellar-aqua-amm-viewer/commit/be0ca05b2c8100d25b38d7aa6593c88e122e2964))
+
 ### [0.2.2](https://github.com/fpbrault/stellar-aqua-amm-viewer/compare/v0.2.1...v0.2.2) (2021-12-21)
 
 

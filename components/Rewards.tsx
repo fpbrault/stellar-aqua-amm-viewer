@@ -175,9 +175,13 @@ const Rewards: React.FC = () => {
             {"Version " + LIB_VERSION + " - What's new:"}
           </div>
           <ul className="px-4 list-disc">
-            <li>Added changelog modal window (only shown once per new version)</li>
-            <li>Values invested can be retrieved using Public Key</li>
-            <li>Added Albedo wallet support</li>
+            <li>Public Key is now saved to local storage</li>
+            <li>
+              <span>Predicted future rewards based on current votes can be viewed. </span>
+              <span className="text-sm italic">
+                Keep in mind that these reward values may change at any time!
+              </span>
+            </li>
           </ul>
           <div className="modal-action">
             <button tabIndex={0} className="btn" onClick={() => handleSetVersion()}>

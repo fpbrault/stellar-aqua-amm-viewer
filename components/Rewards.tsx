@@ -78,8 +78,7 @@ const Rewards: React.FC = () => {
   const [showFutureRewards, setShowFutureRewards] = useState(false);
 
   const connected = async (pubKey: string) => {
-    setPublicKey(pubKey);
-    handleRefreshData();
+    handleSetPublicKey(pubKey);
   };
 
   const { data: rewards, error: rewardsError } = useGetData(
@@ -121,8 +120,10 @@ const Rewards: React.FC = () => {
     if (localStorage) {
       const getTheme = localStorage.getItem("theme");
       const getVersion = localStorage.getItem("version");
+      const getPubKey = localStorage.getItem("publicKey");
 
       setTheme(getTheme ? JSON.parse(getTheme) : "stellar");
+      setPublicKey(getPubKey ? JSON.parse(getPubKey) : "");
       setVersion(getVersion ? JSON.parse(getVersion) : "0.0.0");
     }
   }, []);
@@ -142,6 +143,11 @@ const Rewards: React.FC = () => {
   function handleSetVersion() {
     setVersion(LIB_VERSION);
     localStorage.setItem("version", JSON.stringify(LIB_VERSION));
+  }
+  function handleSetPublicKey(pubKey: string) {
+    setPublicKey(pubKey);
+    localStorage.setItem("publicKey", JSON.stringify(pubKey));
+    handleRefreshData();
   }
 
   function handleRefreshData() {

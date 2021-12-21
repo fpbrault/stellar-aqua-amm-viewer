@@ -75,13 +75,16 @@ const Rewards: React.FC = () => {
   const [showLatestChanges, setShowLatestChanges] = useState(false);
   const [poolIds, setPoolIds] = useState();
   const [theme, setTheme] = useState("stellar");
+  const [showFutureRewards, setShowFutureRewards] = useState(false);
 
   const connected = async (pubKey: string) => {
     setPublicKey(pubKey);
     handleRefreshData();
   };
 
-  const { data: rewards, error: rewardsError } = useGetData("/api/rewards");
+  const { data: rewards, error: rewardsError } = useGetData(
+    showFutureRewards ? "/api/rewards?future=true" : "/api/rewards"
+  );
 
   const { data: account } = useSWR(
     publicKey.length === 56 ? "https://horizon.stellar.org/accounts/" + publicKey : null,
@@ -198,13 +201,24 @@ const Rewards: React.FC = () => {
                     />
                   </label>
                   <label className="cursor-pointer label">
+                    <span className="label-text">Future Rewards</span>
+                    <input
+                      type="checkbox"
+                      checked={showFutureRewards}
+                      className="toggle toggle-primary"
+                      onChange={(event) =>
+                        setShowFutureRewards(event.currentTarget.checked ? true : false)
+                      }
+                    />
+                  </label>
+                  <label className="cursor-pointer label">
                     <span className="w-1/4 label-text">Public Key</span>
 
                     <input
                       type="text"
                       value={publicKey}
                       className="w-3/4 input input-sm input-primary"
-                      onChange={(event) => setPublicKey(event.currentTarget.value)}
+                      onChange={(event) => handleSetPublicKey(event.currentTarget.value)}
                     />
                   </label>
 
@@ -289,15 +303,27 @@ const Rewards: React.FC = () => {
                 ready={tableInfo && assets}>
                 <>
                   {tableInfo && assets && (
-                    <RewardsTable
-                      data={tableInfo}
-                      aquaPrice={
-                        assets.assets.find(
-                          (asset: { id: string }) =>
-                            asset.id ===
-                            "AQUA-GBNZILSTVQZ4R7IKQDGHYGY2QXL5QOFJYQMXPKWRRM5PAV7Y4M67AQUA"
-                        ).price_USD
-                      }></RewardsTable>
+                    <div
+                      className={
+                        "p-2 border rounded-lg shadow-sm bg-base-200 " +
+                        (showFutureRewards ? " bg-orange-500" : null)
+                      }>
+                      {showFutureRewards && (
+                        <div className="mb-2 text-xl text-center text-black text-bold">
+                          WARNING: THESE REWARD VALUES ARE BASED ON CURRENT VOTES AND MAY CHANGE AT
+                          ANY TIME.
+                        </div>
+                      )}
+                      <RewardsTable
+                        data={tableInfo}
+                        aquaPrice={
+                          assets.assets.find(
+                            (asset: { id: string }) =>
+                              asset.id ===
+                              "AQUA-GBNZILSTVQZ4R7IKQDGHYGY2QXL5QOFJYQMXPKWRRM5PAV7Y4M67AQUA"
+                          ).price_USD
+                        }></RewardsTable>
+                    </div>
                   )}{" "}
                 </>
               </ReactPlaceholder>

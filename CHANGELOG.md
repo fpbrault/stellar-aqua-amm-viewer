@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.2.0](https://github.com/fpbrault/stellar-aqua-amm-viewer/compare/v0.1.2...v0.2.0) (2021-12-21)
+
+
+### Features
+
+* 🎸 adds future rewards ([aca8b2c](https://github.com/fpbrault/stellar-aqua-amm-viewer/commit/aca8b2c2dad437970c9fd31054258bda384424a5))
+* 🎸 save public key to local storage ([4ebc176](https://github.com/fpbrault/stellar-aqua-amm-viewer/commit/4ebc176b82bce73ba7ad24eb0eca985c8deface4))
+* 🎸 Use only one request to get reward data ([d34190a](https://github.com/fpbrault/stellar-aqua-amm-viewer/commit/d34190aa2fcead44dfc099081d95a011b939acdf))
+
+
+### Bug Fixes
+
+* 🐛 fixes account data not updating when pressing refresh ([624e2b2](https://github.com/fpbrault/stellar-aqua-amm-viewer/commit/624e2b26fa9dbb818292f51ecba629463ef57c77))
+
 ### [0.1.2](https://github.com/fpbrault/stellar-aqua-amm-viewer/compare/v0.1.1...v0.1.2) (2021-12-20)
 
 

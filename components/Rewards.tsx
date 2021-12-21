@@ -149,6 +149,10 @@ const Rewards: React.FC = () => {
     localStorage.setItem("publicKey", JSON.stringify(pubKey));
     handleRefreshData();
   }
+  function handleSetShowFutureRewards(value: boolean) {
+    setShowFutureRewards(value);
+    handleRefreshData();
+  }
 
   function handleRefreshData() {
     mutate(
@@ -214,10 +218,11 @@ const Rewards: React.FC = () => {
                     <span className="label-text">Future Rewards</span>
                     <input
                       type="checkbox"
+                      disabled={!tableInfo}
                       checked={showFutureRewards}
                       className="toggle toggle-primary"
                       onChange={(event) =>
-                        setShowFutureRewards(event.currentTarget.checked ? true : false)
+                        handleSetShowFutureRewards(event.currentTarget.checked ? true : false)
                       }
                     />
                   </label>
@@ -226,6 +231,7 @@ const Rewards: React.FC = () => {
 
                     <input
                       type="text"
+                      disabled={!tableInfo}
                       value={publicKey}
                       className="w-3/4 input input-sm input-primary"
                       onChange={(event) => handleSetPublicKey(event.currentTarget.value)}
@@ -236,6 +242,7 @@ const Rewards: React.FC = () => {
                     <div className="flex flex-col w-full max-w-xs py-2 mx-auto">
                       <button
                         className="btn btn-primary btn-block"
+                        disabled={!tableInfo}
                         onClick={() => wallet.albedoWallet().then((pubKey) => connected(pubKey))}>
                         <span className="flex flex-col items-end">
                           <Image
@@ -251,6 +258,7 @@ const Rewards: React.FC = () => {
                     <div className="flex flex-col w-full max-w-xs py-2 mx-auto">
                       <button
                         className="btn btn-primary"
+                        disabled={!tableInfo}
                         onClick={() => {
                           connected("");
                         }}>
@@ -271,18 +279,9 @@ const Rewards: React.FC = () => {
                       </button>
                     </div>
                   )}
-
-                  {/*  <label className="cursor-pointer label">
-                    <span className="label-text">Show Details</span>
-                    <input
-                      type="checkbox"
-                      checked={showDetails}
-                      className="toggle toggle-primary"
-                      onChange={(event) => handleShowDetails(event.currentTarget.checked)}
-                    />
-                  </label> */}
                   <button
                     className="max-w-xs py-2 mx-auto btn btn-md btn-primary btn-block btn-outline"
+                    disabled={!tableInfo}
                     onClick={() => {
                       handleRefreshData();
                     }}>

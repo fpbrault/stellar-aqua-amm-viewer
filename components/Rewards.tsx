@@ -192,11 +192,11 @@ const Rewards: React.FC = () => {
       />
 
       <div className="modal">
-        <div className="modal-box">
+        <div className="w-full max-w-5xl mx-4 my-auto rounded-lg modal-box">
           <div className="mb-4 text-3xl font-bold">
             {"Version " + LIB_VERSION + " - What's new:"}
           </div>
-          <ul className="px-4 list-disc">
+          <ul className="h-full px-4 overflow-auto list-disc max-h-64">
             <li>Public Key is now saved to local storage</li>
             <li>
               <span>Predicted future rewards based on current votes can be viewed. </span>
@@ -204,6 +204,12 @@ const Rewards: React.FC = () => {
                 Keep in mind that these reward values may change at any time!
               </span>
             </li>
+            <li>Fixed new account data not always being retrieved when pressing refresh</li>
+            <li>
+              Added input to set a investment value on all pairs. The value is ignored when a public
+              key has been entered.
+            </li>
+            <li>Minor UI improvements</li>
           </ul>
           <div className="modal-action">
             <button tabIndex={0} className="btn" onClick={() => handleSetVersion()}>

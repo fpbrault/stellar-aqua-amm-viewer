@@ -219,7 +219,7 @@ const Rewards: React.FC = () => {
               AMM AQUA rewards viewer
             </h1>
             <div className="mx-2">
-              <div className="max-w-md p-2 mx-auto bg-base-300 card bordered">
+              <div className="max-w-md p-2 mx-auto border bg-base-200 border-neutral card bordered">
                 <div className="form-control">
                   <label className="cursor-pointer label">
                     <span className="label-text">Dark Mode</span>
@@ -263,7 +263,7 @@ const Rewards: React.FC = () => {
                       disabled={publicKey.length === 56}
                       name="value-input"
                       className={
-                        "w-3/4 text-right input input-sm input-primary " +
+                        "w-3/4 text-right input input-primary " +
                         (publicKey.length === 56 ? " input-disabled" : "")
                       }
                       placeholder="0.00"

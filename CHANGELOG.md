@@ -2,6 +2,22 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.2.4](https://github.com/fpbrault/stellar-aqua-amm-viewer/compare/v0.2.3...v0.2.4) (2021-12-22)
+
+
+### Features
+
+* 🎸 adds input to set amount on all pairs ([0b738cd](https://github.com/fpbrault/stellar-aqua-amm-viewer/commit/0b738cd830930c07d1961577bab1c67d1f3ef230)), closes [#2](https://github.com/fpbrault/stellar-aqua-amm-viewer/issues/2)
+* 🎸 Improve option section appearance ([77efcdb](https://github.com/fpbrault/stellar-aqua-amm-viewer/commit/77efcdb3294e2020a2ea1f3f1a29c099833c384a))
+* 🎸 improves table appearance ([0b64400](https://github.com/fpbrault/stellar-aqua-amm-viewer/commit/0b644007e866301f7e4c74d1469d14682edcbdc3))
+
+
+### Bug Fixes
+
+* 🐛 fixes account data something missing ([28ea425](https://github.com/fpbrault/stellar-aqua-amm-viewer/commit/28ea4259cb28955988b2f66819bd0c20b861db3d))
+* 🐛 fixes data not being up to date quickly enough ([42368cc](https://github.com/fpbrault/stellar-aqua-amm-viewer/commit/42368cce8dd2e6e8c28ef0c199b59754df23e109))
+* 🐛 fixes table scroll on mobile ([5d4bf07](https://github.com/fpbrault/stellar-aqua-amm-viewer/commit/5d4bf071b25c067b99f6e758a21b5b00018ef668))
+
 ### [0.2.3](https://github.com/fpbrault/stellar-aqua-amm-viewer/compare/v0.2.2...v0.2.3) (2021-12-21)
 
 

@@ -1,7 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse): Promise<void> {
-  res.setHeader("Cache-Control", "s-maxage=120");
+  res.setHeader("Cache-Control", "s-maxage=60");
 
   const { pool } = req.query;
 

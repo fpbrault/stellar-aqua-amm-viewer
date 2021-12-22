@@ -25,7 +25,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     daily_amm_reward: any;
   };
 
-  res.setHeader("Cache-Control", "s-maxage=120");
+  //res.setHeader("Cache-Control", "s-maxage=60");
 
   if (req.method === "POST") {
     const response = await Promise.all(

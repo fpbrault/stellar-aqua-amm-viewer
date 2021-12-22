@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable no-unused-vars */
 import React, { useEffect, useMemo, useState } from "react";
-import useSWR, { mutate } from "swr";
+import useSWR, { useSWRConfig } from "swr";
 import { useGetData } from "../lib/useRequest";
 import RewardsTable from "./Table";
 import ReactPlaceholder from "react-placeholder";
@@ -70,6 +70,7 @@ const fetcher3 = async (url: string, body: any) => {
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
 const Rewards: React.FC = () => {
+  const { mutate } = useSWRConfig();
   const [publicKey, setPublicKey] = useState("");
   const [version, setVersion] = useState("0.0.0");
   const [showLatestChanges, setShowLatestChanges] = useState(false);
@@ -111,10 +112,16 @@ const Rewards: React.FC = () => {
       assets: assets && assets.assets
     };
   }, [account, assets, pools, rewards]);
-
-  const { data: tableInfo } = useSWR(pools ? ["/api/table", tableParams] : null, fetcher3, {
-    revalidateOnFocus: false
-  });
+  const { data: tableInfo } = useSWR(
+    (pools && assets && rewards && publicKey.length !== 56) ||
+      (pools && assets && rewards && account)
+      ? ["/api/table", tableParams]
+      : null,
+    fetcher3,
+    {
+      revalidateOnFocus: false
+    }
+  );
 
   useEffect(() => {
     if (localStorage) {
@@ -155,7 +162,11 @@ const Rewards: React.FC = () => {
   }
 
   function handleRefreshData() {
-    mutate(poolIds ? ["/api/pools", { pools: poolIds }] : null, false);
+    mutate("/api/assets", false);
+    mutate(
+      publicKey.length === 56 ? "https://horizon.stellar.org/accounts/" + publicKey : null,
+      false
+    );
   }
 
   if (rewardsError || error) return <div>ERROR</div>;

@@ -1,7 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse): Promise<void> {
-  res.setHeader("Cache-Control", "s-maxage=60");
+  res.setHeader("Cache-Control", "s-maxage=30");
 
   if (req.method === "GET") {
     const result = await fetch("https://api.stellarterm.com/v1/ticker.json", {

@@ -1,7 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse): Promise<void> {
-  const { pools, rewards, assets, account } = JSON.parse(req.body);
+  const { pools, rewards, assets, account, amount } = JSON.parse(req.body);
 
   type Response = {
     poolId: string;
@@ -97,6 +97,11 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             rewardPerHour = rewardPerDollar * totalValueInvested;
             rewardPerHourUsd = parseFloat((rewardPerDollar * totalValueInvested).toFixed(2));
           }
+        } else if (amount && amount != "0.00") {
+          totalValueInvested = amount;
+          myShares = 0;
+          rewardPerHour = rewardPerDollar * amount;
+          rewardPerHourUsd = parseFloat((rewardPerDollar * amount).toFixed(2));
         }
 
         return {

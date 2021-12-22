@@ -47,8 +47,10 @@ const EditableCell = ({
       name="value-input"
       prefix="$"
       className="text-center input-xs input-bordered input"
-      placeholder="Please enter a number"
+      placeholder="0.00"
+      step={10}
       defaultValue={value}
+      allowNegativeValue={false}
       decimalsLimit={2}
       onValueChange={(value) => onChange(value ?? "0")}
       onBlur={onBlur}
@@ -189,7 +191,7 @@ function RewardsTable(props: { aquaPrice: any; data: any }): React.ReactElement 
         Footer: "REWARD PER $",
         accessor: "rewardPerDollar",
         Cell: ({ value }: { value: string }) => (
-          <span className="text-right badge badge-primary badge-outline">{value} AQUA</span>
+          <span className="text-center badge badge-primary badge-outline">{value} AQUA</span>
         )
       },
       {
@@ -197,38 +199,10 @@ function RewardsTable(props: { aquaPrice: any; data: any }): React.ReactElement 
         Footer: "REWARD PER $ (DAY)",
         accessor: "rewardPerDollarPerDay",
         Cell: ({ value }: { value: string }) => (
-          <span className="text-right badge badge-primary badge-outline">{value} AQUA</span>
+          <span className="text-center badge badge-primary badge-outline">{value} AQUA</span>
         )
       },
-      {
-        Header: "Total Shares",
-        Footer: "Total Shares",
-        accessor: "totalShares",
-        Cell: ({ value }: { value: string }) => <span>{parseFloat(value).toFixed(0)}</span>
-      },
-      {
-        Header: "Pool Value",
-        Footer: "Pool Value",
-        accessor: "poolValue",
-        Cell: ({ value }: { value: string }) => <span>{parseFloat(value).toFixed(0)}</span>
-      },
-      {
-        Header: "Daily AMM Reward",
-        accessor: "dailyReward",
-        Footer: (info: { rows: any[] }) => {
-          // Only calculate total visits if rows change
-          const total = React.useMemo(
-            () =>
-              info.rows.reduce(
-                (sum: any, row: { values: { dailyReward: any } }) => row.values.dailyReward + sum,
-                0
-              ),
-            [info.rows]
-          );
 
-          return <>Total: {total}</>;
-        }
-      },
       {
         Header: "TOTAL VALUE INVESTED",
         Footer: (info: { rows: any[] }) => {
@@ -294,7 +268,7 @@ function RewardsTable(props: { aquaPrice: any; data: any }): React.ReactElement 
         Cell: (props: { value: number }) => (
           <div>
             {props.value ? (
-              <span className="badge badge-primary badge-outline">
+              <span className="badge badge-secondary ">
                 {(props.value * aquaPrice).toFixed(2) + "$"}
               </span>
             ) : null}
@@ -320,12 +294,44 @@ function RewardsTable(props: { aquaPrice: any; data: any }): React.ReactElement 
         Cell: (props: { value: number }) => (
           <div>
             {props.value ? (
-              <span className="badge badge-primary badge-outline">
+              <span className="badge badge-secondary">
                 {(props.value * aquaPrice).toFixed(2) + "$"}
               </span>
             ) : null}
           </div>
         )
+      },
+      {
+        Header: "Total Shares",
+        Footer: "Total Shares",
+        accessor: "totalShares",
+        Cell: ({ value }: { value: string }) => <span>{parseFloat(value).toFixed(0)}</span>
+      },
+      {
+        Header: "Pool Value",
+        Footer: "Pool Value",
+        accessor: "poolValue",
+        Cell: ({ value }: { value: string }) => <span>{"$" + parseFloat(value).toFixed(0)}</span>
+      },
+      {
+        Header: "Daily AMM Reward",
+        accessor: "dailyReward",
+        Cell: ({ value }: { value: string }) => (
+          <span>{parseFloat(value).toFixed(0) + " AQUA"}</span>
+        ),
+        Footer: (info: { rows: any[] }) => {
+          // Only calculate total visits if rows change
+          const total = React.useMemo(
+            () =>
+              info.rows.reduce(
+                (sum: any, row: { values: { dailyReward: any } }) => row.values.dailyReward + sum,
+                0
+              ),
+            [info.rows]
+          );
+
+          return <>Total: {total}</>;
+        }
       }
     ],
     [aquaPrice]

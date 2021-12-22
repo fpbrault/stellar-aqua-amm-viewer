@@ -9,6 +9,7 @@ import "react-placeholder/lib/reactPlaceholder.css";
 import * as wallet from "../lib/wallet";
 import Image from "next/image";
 import { LIB_VERSION } from "../version";
+import CurrencyInput from "react-currency-input-field";
 
 const getPoolIds = async (
   assets: {
@@ -72,6 +73,7 @@ const fetcher = (url: string) => fetch(url).then((res) => res.json());
 const Rewards: React.FC = () => {
   const { mutate } = useSWRConfig();
   const [publicKey, setPublicKey] = useState("");
+  const [amount, setAmount] = useState("0.00");
   const [version, setVersion] = useState("0.0.0");
   const [showLatestChanges, setShowLatestChanges] = useState(false);
   const [poolIds, setPoolIds] = useState();
@@ -109,9 +111,10 @@ const Rewards: React.FC = () => {
       pools: pools && pools,
       account: account && account,
       rewards: rewards && rewards,
-      assets: assets && assets.assets
+      assets: assets && assets.assets,
+      amount: amount && amount
     };
-  }, [account, assets, pools, rewards]);
+  }, [account, amount, assets, pools, rewards]);
   const { data: tableInfo } = useSWR(
     (pools && assets && rewards && publicKey.length !== 56) ||
       (pools && assets && rewards && account)
@@ -128,10 +131,12 @@ const Rewards: React.FC = () => {
       const getTheme = localStorage.getItem("theme");
       const getVersion = localStorage.getItem("version");
       const getPubKey = localStorage.getItem("publicKey");
+      const getAmount = localStorage.getItem("amount");
 
       setTheme(getTheme ? JSON.parse(getTheme) : "stellar");
       setPublicKey(getPubKey ? JSON.parse(getPubKey) : "");
       setVersion(getVersion ? JSON.parse(getVersion) : "0.0.0");
+      setAmount(getAmount ? JSON.parse(getAmount) : "0.00");
     }
   }, []);
 
@@ -158,6 +163,12 @@ const Rewards: React.FC = () => {
   }
   function handleSetShowFutureRewards(value: boolean) {
     setShowFutureRewards(value);
+    handleRefreshData();
+  }
+
+  function handleSetAmount(value: string) {
+    setAmount(value);
+    localStorage.setItem("amount", JSON.stringify(value));
     handleRefreshData();
   }
 
@@ -221,6 +232,7 @@ const Rewards: React.FC = () => {
                       }
                     />
                   </label>
+
                   <label className="cursor-pointer label">
                     <span className="label-text">Future Rewards</span>
                     <input
@@ -244,6 +256,24 @@ const Rewards: React.FC = () => {
                       onChange={(event) => handleSetPublicKey(event.currentTarget.value)}
                     />
                   </label>
+                  <div className="cursor-pointer label">
+                    <span className="w-1/4 label-text">Manual Amount</span>
+                    <CurrencyInput
+                      id="value-input"
+                      disabled={publicKey.length === 56}
+                      name="value-input"
+                      className={
+                        "w-3/4 text-right input input-sm input-primary " +
+                        (publicKey.length === 56 ? " input-disabled" : "")
+                      }
+                      placeholder="0.00"
+                      step={10}
+                      value={amount}
+                      allowNegativeValue={false}
+                      decimalsLimit={2}
+                      onValueChange={(amount) => handleSetAmount(amount ?? "0.00")}
+                    />
+                  </div>
 
                   {!publicKey ? (
                     <div className="flex flex-col w-full max-w-xs py-2 mx-auto">
@@ -287,7 +317,7 @@ const Rewards: React.FC = () => {
                     </div>
                   )}
                   <button
-                    className="max-w-xs py-2 mx-auto btn btn-md btn-primary btn-block btn-outline"
+                    className="max-w-xs py-2 mx-auto btn btn-md btn-block btn-secondary"
                     disabled={!tableInfo}
                     onClick={() => {
                       handleRefreshData();

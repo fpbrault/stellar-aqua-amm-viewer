@@ -2,6 +2,34 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.3.0](https://github.com/fpbrault/stellar-aqua-amm-viewer/compare/v0.2.4...v0.3.0) (2021-12-27)
+
+
+### Features
+
+* 🎸 adds options menu and improve UI ([1ff4a65](https://github.com/fpbrault/stellar-aqua-amm-viewer/commit/1ff4a65ee63589386a44e250664e393dfe5ebb0e))
+* 🎸 improves UI ([d6ab8f8](https://github.com/fpbrault/stellar-aqua-amm-viewer/commit/d6ab8f85f5bee73c79e9ed8f9246b86ab02d10f3))
+* 🎸 Improves UI for mobile ([e31db49](https://github.com/fpbrault/stellar-aqua-amm-viewer/commit/e31db49d115e7cb7047f66f2aca35ccd82893707))
+
+
+### Bug Fixes
+
+* 🐛 fixes type for daily_amm_reward ([d84137f](https://github.com/fpbrault/stellar-aqua-amm-viewer/commit/d84137f30891b016f77519254cdb1d674e33f9b2))
+
+### [0.2.5](https://github.com/fpbrault/stellar-aqua-amm-viewer/compare/v0.2.4...v0.2.5) (2021-12-27)
+
+
+### Features
+
+* 🎸 adds options menu and improve UI ([1ff4a65](https://github.com/fpbrault/stellar-aqua-amm-viewer/commit/1ff4a65ee63589386a44e250664e393dfe5ebb0e))
+* 🎸 improves UI ([d6ab8f8](https://github.com/fpbrault/stellar-aqua-amm-viewer/commit/d6ab8f85f5bee73c79e9ed8f9246b86ab02d10f3))
+* 🎸 Improves UI for mobile ([e31db49](https://github.com/fpbrault/stellar-aqua-amm-viewer/commit/e31db49d115e7cb7047f66f2aca35ccd82893707))
+
+
+### Bug Fixes
+
+* 🐛 fixes type for daily_amm_reward ([d84137f](https://github.com/fpbrault/stellar-aqua-amm-viewer/commit/d84137f30891b016f77519254cdb1d674e33f9b2))
+
 ### [0.2.4](https://github.com/fpbrault/stellar-aqua-amm-viewer/compare/v0.2.3...v0.2.4) (2021-12-22)
 
 

@@ -22,7 +22,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       asset2_issuer: string | null;
       asset2_code: string;
     };
-    daily_amm_reward: any;
+    daily_amm_reward: number;
   };
 
   //res.setHeader("Cache-Control", "s-maxage=60");

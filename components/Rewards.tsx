@@ -204,7 +204,7 @@ const Rewards: React.FC = () => {
             {"Version " + LIB_VERSION + " - What's new:"}
           </div>
           <ul className="h-full px-4 overflow-auto list-disc max-h-64">
-            <li>Improved UI on mobile</li>
+            <li>Improved UI on mobile and desktop</li>
             <li>Changed color on some columns to improve readability</li>
           </ul>
           <div className="modal-action">
@@ -217,32 +217,54 @@ const Rewards: React.FC = () => {
       <div className="min-h-screen pt-0">
         <div className="flex flex-col justify-center w-full h-screen ">
           <div className="w-full h-full min-h-screen mx-auto shadow-2xl">
-            <div className="sticky top-0 z-50 md:relative md:mx-2">
-              <h1 className="py-4 text-xl font-bold text-center shadow-lg md:mb-2 md:shadow-none md:top-auto bg-primary md:bg-transparent md:text-neutral text-neutral-content md:text-5xl">
-                AMM AQUA rewards viewer
-              </h1>
+            <div className="sticky top-0 z-50">
+              <div className="hidden lg:inline">
+                <div className="mb-2 shadow-lg navbar bg-neutral ">
+                  <div className="flex-1 hidden px-2 mx-2 lg:flex">
+                    <span className="text-lg font-bold text-neutral-content">
+                      AMM AQUA rewards viewer
+                    </span>
+                  </div>
 
-              <div className="p-2 mx-auto md:max-w-sm bg-base-300 md:card">
-                <div className="w-full pt-1 mx-auto form-control">
-                  <div className="relative">
+                  <div className="flex-none">
+                    <button
+                      className={"mx-3 btn btn-primary" + (!tableInfo ? " loading" : "")}
+                      disabled={!tableInfo}
+                      onClick={() => {
+                        handleRefreshData();
+                      }}>
+                      Refresh
+                    </button>
+                  </div>
+                  <div className="flex-none">
+                    <span className="pr-1 text-white label-text">Dark Mode</span>
+                    <input
+                      type="checkbox"
+                      checked={theme === "dark"}
+                      className="mr-2 toggle"
+                      onChange={(event) =>
+                        handleSetTheme(event.currentTarget.checked ? "dark" : "stellar")
+                      }
+                    />
+                  </div>
+
+                  <div className="flex-none">
                     <input
                       type="text"
                       disabled={!tableInfo}
                       placeholder="Public Key"
                       value={publicKey}
-                      className="w-full pr-16 input input-sm input-primary input-bordered"
+                      className="mr-2 w-96 input input-bordered"
                       onChange={(event) => handleSetPublicKey(event.currentTarget.value)}
                     />
 
                     {!publicKey ? (
-                      <div
-                        className="flex flex-col w-full max-w-xs py-2 mx-auto "
-                        data-tip="Get Public Key using Albedo Wallet">
+                      <div className="o" data-tip="Get Public Key using Albedo Wallet">
                         <button
-                          className="absolute top-0 right-0 rounded-l-none btn btn-sm btn-primary"
+                          className="btn btn-circle btn-primary"
                           disabled={!tableInfo}
                           onClick={() => wallet.albedoWallet().then((pubKey) => connected(pubKey))}>
-                          <span className="flex flex-col items-end">
+                          <span className="">
                             <Image
                               alt="albedo-logo"
                               src="/images/albedo.svg"
@@ -252,9 +274,9 @@ const Rewards: React.FC = () => {
                         </button>
                       </div>
                     ) : (
-                      <div className="flex flex-col w-full max-w-xs py-2 mx-auto">
+                      <div className="">
                         <button
-                          className="absolute top-0 right-0 rounded-l-none btn btn-sm btn-primary"
+                          className="btn btn-circle btn-primary"
                           disabled={!tableInfo}
                           onClick={() => {
                             connected("");
@@ -276,82 +298,172 @@ const Rewards: React.FC = () => {
                       </div>
                     )}
                   </div>
-
-                  <button
-                    className="mx-auto mb-1 btn btn-md btn-block btn-primary"
-                    disabled={!tableInfo}
-                    onClick={() => {
-                      handleRefreshData();
-                    }}>
-                    Refresh
-                  </button>
                 </div>
+              </div>
 
-                <div className="max-w-md mx-auto mt-1 collapse rounded-box collapse-arrow">
-                  <input type="checkbox" />
-                  <div className="text-lg font-medium collapse-title">Options</div>
-                  <div className="collapse-content ">
-                    <div className="form-control">
-                      <label className="cursor-pointer label">
-                        <span className="label-text">Dark Mode</span>
-                        <input
-                          type="checkbox"
-                          checked={theme === "dark"}
-                          className="toggle toggle-primary"
-                          onChange={(event) =>
-                            handleSetTheme(event.currentTarget.checked ? "dark" : "stellar")
-                          }
-                        />
-                      </label>
+              <div className="inline lg:hidden">
+                <h1 className="py-4 text-xl font-bold text-center shadow-lg lg:mb-2 lg:shadow-none lg:top-auto bg-neutral lg:bg-transparent lg:text-neutral text-neutral-content lg:text-5xl">
+                  AMM AQUA rewards viewer
+                </h1>
 
-                      <label className="cursor-pointer label">
-                        <span className="label-text">Future Rewards</span>
-                        <input
-                          type="checkbox"
-                          disabled={!tableInfo}
-                          checked={showFutureRewards}
-                          className="toggle toggle-primary"
-                          onChange={(event) =>
-                            handleSetShowFutureRewards(event.currentTarget.checked ? true : false)
-                          }
-                        />
-                      </label>
-                      <div className="cursor-pointer label">
-                        <span className="w-1/4 label-text">Manual Amount</span>
-                        <CurrencyInput
-                          id="value-input"
-                          disabled={publicKey.length === 56}
-                          name="value-input"
-                          className={
-                            "text-right input input-sm input-primary " +
-                            (publicKey.length === 56 ? " input-disabled" : "")
-                          }
-                          placeholder="0.00"
-                          step={10}
-                          value={amount}
-                          allowNegativeValue={false}
-                          decimalsLimit={2}
-                          onValueChange={(amount) => handleSetAmount(amount ?? "0.00")}
-                        />
-                      </div>
-                      <div className="pt-2 text-center break-words text-2xs">
-                        <div className="">
-                          {"If you like this tool, please consider sending a tip: "}
-                          GDVLJKTGQGI5NXD5D2VBQZVQ5YVX7MJ7UHKPW6INEAHI4PKYDUT77KCS
+                <div className="p-2 mx-auto lg:max-w-sm bg-base-300 lg:card">
+                  <div className="w-full pt-1 mx-auto form-control">
+                    <div className="relative">
+                      <input
+                        type="text"
+                        disabled={!tableInfo}
+                        placeholder="Public Key"
+                        value={publicKey}
+                        className="w-full pr-16 input input-sm input-primary input-bordered"
+                        onChange={(event) => handleSetPublicKey(event.currentTarget.value)}
+                      />
+
+                      {!publicKey ? (
+                        <div
+                          className="flex flex-col w-full max-w-xs py-2 mx-auto "
+                          data-tip="Get Public Key using Albedo Wallet">
+                          <button
+                            className="absolute top-0 right-0 rounded-l-none btn btn-sm btn-primary"
+                            disabled={!tableInfo}
+                            onClick={() =>
+                              wallet.albedoWallet().then((pubKey) => connected(pubKey))
+                            }>
+                            <span className="flex flex-col items-end">
+                              <Image
+                                alt="albedo-logo"
+                                src="/images/albedo.svg"
+                                width={24}
+                                height={24}></Image>
+                            </span>
+                          </button>
                         </div>
-                        <a
-                          className="link link-primary"
-                          href="https://github.com/fpbrault/stellar-aqua-amm-viewer">
-                          Source code
-                        </a>
+                      ) : (
+                        <div className="flex flex-col w-full max-w-xs py-2 mx-auto">
+                          <button
+                            className="absolute top-0 right-0 rounded-l-none btn btn-sm btn-primary"
+                            disabled={!tableInfo}
+                            onClick={() => {
+                              connected("");
+                            }}>
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              className="w-6 h-6 ml-1"
+                              fill="none"
+                              viewBox="0 0 24 24"
+                              stroke="currentColor">
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth="2"
+                                d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"
+                              />
+                            </svg>
+                          </button>
+                        </div>
+                      )}
+                    </div>
+
+                    <button
+                      className="mx-auto mb-1 btn btn-md btn-block btn-primary"
+                      disabled={!tableInfo}
+                      onClick={() => {
+                        handleRefreshData();
+                      }}>
+                      Refresh
+                    </button>
+                  </div>
+
+                  <div className="max-w-md mx-auto mt-1 collapse rounded-box collapse-arrow">
+                    <input type="checkbox" />
+                    <div className="text-lg font-medium collapse-title">Options</div>
+                    <div className="collapse-content ">
+                      <div className="form-control">
+                        <label className="cursor-pointer label">
+                          <span className="label-text">Dark Mode</span>
+                          <input
+                            type="checkbox"
+                            checked={theme === "dark"}
+                            className="toggle toggle-primary"
+                            onChange={(event) =>
+                              handleSetTheme(event.currentTarget.checked ? "dark" : "stellar")
+                            }
+                          />
+                        </label>
+
+                        <label className="cursor-pointer label">
+                          <span className="label-text">Future Rewards</span>
+                          <input
+                            type="checkbox"
+                            disabled={!tableInfo}
+                            checked={showFutureRewards}
+                            className="toggle toggle-primary"
+                            onChange={(event) =>
+                              handleSetShowFutureRewards(event.currentTarget.checked ? true : false)
+                            }
+                          />
+                        </label>
+                        <div className="cursor-pointer label">
+                          <span className="w-1/4 label-text">Manual Amount</span>
+                          <CurrencyInput
+                            id="value-input"
+                            disabled={publicKey.length === 56}
+                            name="value-input"
+                            className={
+                              "text-right input input-sm input-primary " +
+                              (publicKey.length === 56 ? " input-disabled" : "")
+                            }
+                            placeholder="0.00"
+                            step={10}
+                            value={amount}
+                            allowNegativeValue={false}
+                            decimalsLimit={2}
+                            onValueChange={(amount) => handleSetAmount(amount ?? "0.00")}
+                          />
+                        </div>
                       </div>
                     </div>
                   </div>
                 </div>
               </div>
             </div>
+            <div className="max-w-6xl mx-auto mt-1">
+              <div className="hidden lg:inline">
+                <div className="flex flex-row justify-evenly rounded-xl bg-base-300 text-base-content form-control">
+                  <label className="cursor-pointer label">
+                    <span className="pr-1 label-text">Future Rewards</span>
+                    <input
+                      type="checkbox"
+                      disabled={!tableInfo}
+                      checked={showFutureRewards}
+                      className="toggle"
+                      onChange={(event) =>
+                        handleSetShowFutureRewards(event.currentTarget.checked ? true : false)
+                      }
+                    />
+                  </label>
+                  <div className="cursor-pointer label">
+                    <span className="w-1/4 label-text">Manual Amount</span>
+                    <CurrencyInput
+                      id="value-input"
+                      disabled={publicKey.length === 56}
+                      name="value-input"
+                      className={
+                        "text-right input input-sm input-primary " +
+                        (publicKey.length === 56 ? " input-disabled" : "")
+                      }
+                      placeholder="0.00"
+                      step={10}
+                      value={amount}
+                      allowNegativeValue={false}
+                      decimalsLimit={2}
+                      onValueChange={(amount) => handleSetAmount(amount ?? "0.00")}
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
 
-            <div className="flex justify-center bg-base-100 md:pt-2 md:pb-8">
+            <div className="flex justify-center bg-base-100 lg:pt-2 lg:pb-8">
               <ReactPlaceholder
                 showLoadingAnimation
                 className="max-w-6xl"
@@ -362,7 +474,7 @@ const Rewards: React.FC = () => {
                   {tableInfo && assets && (
                     <div
                       className={
-                        "overflow-x-auto md:p-2 pt-2 md:rounded-lg shadow-sm bg-base-200 " +
+                        "overflow-x-auto lg:p-2 pt-2 lg:rounded-lg shadow-sm bg-base-200 " +
                         (showFutureRewards ? " bg-orange-500 border-neutral" : null)
                       }>
                       {showFutureRewards && (
@@ -371,7 +483,7 @@ const Rewards: React.FC = () => {
                           ANY TIME.
                         </div>
                       )}
-                      <div className="md:rounded-lg md:p-1 bg-base-200">
+                      <div className="lg:rounded-lg lg:p-1 bg-base-200">
                         <RewardsTable
                           data={tableInfo}
                           aquaPrice={
@@ -386,6 +498,19 @@ const Rewards: React.FC = () => {
                   )}{" "}
                 </>
               </ReactPlaceholder>
+            </div>
+            <div className="p-2 text-center break-words text-2xs bg-base-300 footer footer-center">
+              <div>
+                <div className="">
+                  {"If you like this tool, please consider sending a tip: "}
+                  GDVLJKTGQGI5NXD5D2VBQZVQ5YVX7MJ7UHKPW6INEAHI4PKYDUT77KCS
+                </div>
+                <a
+                  className="link link-primary"
+                  href="https://github.com/fpbrault/stellar-aqua-amm-viewer">
+                  Source code
+                </a>
+              </div>
             </div>
           </div>
         </div>

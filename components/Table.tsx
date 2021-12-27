@@ -360,7 +360,7 @@ function RewardsTable(props: { aquaPrice: any; data: any }): React.ReactElement 
 
   return (
     <>
-      <div className="max-h-screen overflow-y-auto text-9xl md:max-h-full">
+      <div className="max-h-screen overflow-y-auto text-9xl lg:max-h-full">
         <Table columns={columns} data={data} updateMyData={updateMyData} />
       </div>
     </>

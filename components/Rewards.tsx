@@ -184,7 +184,7 @@ const Rewards: React.FC = () => {
   if (rewardsError || error) return <div>ERROR</div>;
 
   return (
-    <div data-theme={theme} className="flex flex-col text-base-content bg-base-content">
+    <div data-theme={theme} className="flex flex-col max-h-screen bg-base-100 text-base-content">
       <ReactTooltip
         effect="float"
         place="bottom"
@@ -204,19 +204,8 @@ const Rewards: React.FC = () => {
             {"Version " + LIB_VERSION + " - What's new:"}
           </div>
           <ul className="h-full px-4 overflow-auto list-disc max-h-64">
-            <li>Public Key is now saved to local storage</li>
-            <li>
-              <span>Predicted future rewards based on current votes can be viewed. </span>
-              <span className="text-sm italic">
-                Keep in mind that these reward values may change at any time!
-              </span>
-            </li>
-            <li>Fixed new account data not always being retrieved when pressing refresh</li>
-            <li>
-              Added input to set a investment value on all pairs. The value is ignored when a public
-              key has been entered.
-            </li>
-            <li>Minor UI improvements</li>
+            <li>Improved UI on mobile</li>
+            <li>Changed color on some columns to improve readability</li>
           </ul>
           <div className="modal-action">
             <button tabIndex={0} className="btn" onClick={() => handleSetVersion()}>
@@ -225,14 +214,15 @@ const Rewards: React.FC = () => {
           </div>
         </div>
       </div>
-      <div className="min-h-screen pt-0 ">
-        <div className="flex flex-col justify-center w-full ">
-          <div className="w-full min-h-screen mx-auto shadow-2xl bg-base-100">
-            <h1 className="sticky top-0 z-50 py-4 mb-2 text-xl font-bold text-center shadow-lg md:shadow-none md:top-auto bg-primary md:bg-transparent md:text-neutral text-neutral-content md:text-5xl">
-              AMM AQUA rewards viewer
-            </h1>
-            <div className="mx-2">
-              <div className="max-w-sm p-2 mx-auto bg-base-300 card">
+      <div className="min-h-screen pt-0">
+        <div className="flex flex-col justify-center w-full h-screen ">
+          <div className="w-full h-full min-h-screen mx-auto shadow-2xl">
+            <div className="sticky top-0 z-50 md:relative md:mx-2">
+              <h1 className="py-4 text-xl font-bold text-center shadow-lg md:mb-2 md:shadow-none md:top-auto bg-primary md:bg-transparent md:text-neutral text-neutral-content md:text-5xl">
+                AMM AQUA rewards viewer
+              </h1>
+
+              <div className="p-2 mx-auto md:max-w-sm bg-base-300 md:card">
                 <div className="w-full pt-1 mx-auto form-control">
                   <div className="relative">
                     <input
@@ -361,7 +351,7 @@ const Rewards: React.FC = () => {
               </div>
             </div>
 
-            <div className="flex justify-center pt-2 pb-8 mx-2">
+            <div className="flex justify-center bg-base-100 md:pt-2 md:pb-8">
               <ReactPlaceholder
                 showLoadingAnimation
                 className="max-w-6xl"
@@ -372,7 +362,7 @@ const Rewards: React.FC = () => {
                   {tableInfo && assets && (
                     <div
                       className={
-                        "overflow-x-auto p-2 rounded-lg shadow-sm bg-base-200 " +
+                        "overflow-x-auto md:p-2 pt-2 md:rounded-lg shadow-sm bg-base-200 " +
                         (showFutureRewards ? " bg-orange-500 border-neutral" : null)
                       }>
                       {showFutureRewards && (
@@ -381,7 +371,7 @@ const Rewards: React.FC = () => {
                           ANY TIME.
                         </div>
                       )}
-                      <div className="p-1 rounded-lg bg-base-200">
+                      <div className="md:rounded-lg md:p-1 bg-base-200">
                         <RewardsTable
                           data={tableInfo}
                           aquaPrice={

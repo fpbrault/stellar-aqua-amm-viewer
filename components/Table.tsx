@@ -90,14 +90,14 @@ function Table({ columns, data, updateMyData }: { columns: any; data: any; updat
         {...getTableProps()}>
         <thead>
           {headerGroups.map((headerGroup: any) => (
-            <tr className="text-primary" {...headerGroup.getHeaderGroupProps()}>
+            <tr className="" {...headerGroup.getHeaderGroupProps()}>
               {headerGroup.headers.map((column: any) => (
                 <th {...column.getHeaderProps()}>
                   <div>
                     <span {...column.getSortByToggleProps()}>
                       {column.render("Header")}
                       {/* Add a sort direction indicator */}
-                      {column.isSorted ? (!column.isSortedDesc ? " ▲" : " ▼") : ""}
+                      {column.isSorted ? (!column.isSortedDesc ? " ▲" : " ▼") : "⬍"}
                     </span>
                   </div>
                 </th>
@@ -134,7 +134,7 @@ function Table({ columns, data, updateMyData }: { columns: any; data: any; updat
             );
           })}
         </tbody>
-        <tfoot className="text-primary">
+        <tfoot>
           {footerGroups.map((group) => (
             <tr {...group.getFooterGroupProps()}>
               {group.headers.map((column) => (
@@ -191,7 +191,7 @@ function RewardsTable(props: { aquaPrice: any; data: any }): React.ReactElement 
         Footer: "REWARD PER $",
         accessor: "rewardPerDollar",
         Cell: ({ value }: { value: string }) => (
-          <span className="text-center badge badge-primary badge-outline">{value} AQUA</span>
+          <span className="text-center badge badge-outline">{value} AQUA</span>
         )
       },
       {
@@ -199,7 +199,7 @@ function RewardsTable(props: { aquaPrice: any; data: any }): React.ReactElement 
         Footer: "REWARD PER $ (DAY)",
         accessor: "rewardPerDollarPerDay",
         Cell: ({ value }: { value: string }) => (
-          <span className="text-center badge badge-primary badge-outline">{value} AQUA</span>
+          <span className="text-center badge badge-outline">{value} AQUA</span>
         )
       },
 
@@ -360,7 +360,7 @@ function RewardsTable(props: { aquaPrice: any; data: any }): React.ReactElement 
 
   return (
     <>
-      <div className="overflow-y-auto md:h-full h-96">
+      <div className="max-h-screen overflow-y-auto text-9xl md:max-h-full">
         <Table columns={columns} data={data} updateMyData={updateMyData} />
       </div>
     </>

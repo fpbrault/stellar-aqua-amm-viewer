@@ -75,10 +75,28 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             asset.id === (asset1.display === "XLM" ? "XLM-native" : asset1.display)
         )?.price_USD;
 
-        const poolValue = pool?.data.reserves[0].amount * 2 * (asset1_value ?? 0);
-        const rewardPerDollar = asset1_value
-          ? dailyReward / 24 / (pool?.data.reserves[0].amount * 2 * (asset1_value ?? 0))
-          : 0;
+        const asset2_value = assets.find(
+          (asset: { id: string }) =>
+            asset.id === (asset2.display === "XLM" ? "XLM-native" : asset2.display)
+        )?.price_USD;
+
+        let poolValue;
+        let rewardPerDollar;
+
+        if (asset1_value) {
+          poolValue = pool?.data.reserves[0].amount * 2 * (asset1_value ?? 0);
+          rewardPerDollar = asset1_value
+            ? dailyReward / 24 / (pool?.data.reserves[0].amount * 2 * (asset1_value ?? 0))
+            : 0;
+        } else if (asset2_value) {
+          poolValue = pool?.data.reserves[0].amount * 2 * (asset2_value ?? 0);
+          rewardPerDollar = asset2_value
+            ? dailyReward / 24 / (pool?.data.reserves[0].amount * 2 * (asset2_value ?? 0))
+            : 0;
+        } else {
+          poolValue = 0;
+          rewardPerDollar = 0;
+        }
         const valuePerShare = poolValue / pool?.data.total_shares;
 
         let totalValueInvested = 0;

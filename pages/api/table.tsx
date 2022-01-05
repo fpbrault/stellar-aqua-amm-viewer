@@ -65,8 +65,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         const pairId = asset1.id + "," + asset2.id;
         const displayId = asset1.display + "/" + asset2.display;
         const pool = pools.find((pool: { id: string }) => pool.id === pairId);
-        const poolId = pool?.data.id;
-        const totalShares = pool?.data.total_shares;
+        const poolId = pool?.data?.id;
+        const totalShares = pool?.data?.total_shares;
 
         const dailyReward = rewardAsset.daily_amm_reward;
 
@@ -83,21 +83,26 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         let poolValue;
         let rewardPerDollar;
 
-        if (asset1_value) {
-          poolValue = pool?.data.reserves[0].amount * 2 * (asset1_value ?? 0);
-          rewardPerDollar = asset1_value
-            ? dailyReward / 24 / (pool?.data.reserves[0].amount * 2 * (asset1_value ?? 0))
-            : 0;
-        } else if (asset2_value) {
-          poolValue = pool?.data.reserves[0].amount * 2 * (asset2_value ?? 0);
-          rewardPerDollar = asset2_value
-            ? dailyReward / 24 / (pool?.data.reserves[0].amount * 2 * (asset2_value ?? 0))
-            : 0;
+        if (pool?.data) {
+          if (asset1_value) {
+            poolValue = pool?.data.reserves[0].amount * 2 * (asset1_value ?? 0);
+            rewardPerDollar = asset1_value
+              ? dailyReward / 24 / (pool?.data.reserves[0].amount * 2 * (asset1_value ?? 0))
+              : 0;
+          } else if (asset2_value) {
+            poolValue = pool?.data.reserves[0].amount * 2 * (asset2_value ?? 0);
+            rewardPerDollar = asset2_value
+              ? dailyReward / 24 / (pool?.data.reserves[0].amount * 2 * (asset2_value ?? 0))
+              : 0;
+          } else {
+            poolValue = 0;
+            rewardPerDollar = 0;
+          }
         } else {
           poolValue = 0;
           rewardPerDollar = 0;
         }
-        const valuePerShare = poolValue / pool?.data.total_shares;
+        const valuePerShare = poolValue / pool?.data?.total_shares;
 
         let totalValueInvested = 0;
         let myShares = 0;

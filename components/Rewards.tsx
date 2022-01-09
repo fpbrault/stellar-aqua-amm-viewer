@@ -80,6 +80,7 @@ const Rewards: React.FC = () => {
   const [poolIds, setPoolIds] = useState();
   const [theme, setTheme] = useState("stellar");
   const [showFutureRewards, setShowFutureRewards] = useState(false);
+  const [showMyPairs, setShowMyPairs] = useState(false);
 
   const connected = async (pubKey: string) => {
     handleSetPublicKey(pubKey);
@@ -132,10 +133,12 @@ const Rewards: React.FC = () => {
       const getTheme = localStorage.getItem("theme");
       const getVersion = localStorage.getItem("version");
       const getPubKey = localStorage.getItem("publicKey");
+      const getShowMyPairs = localStorage.getItem("showMyPairs");
       const getAmount = localStorage.getItem("amount");
 
       setTheme(getTheme ? JSON.parse(getTheme) : "stellar");
       setPublicKey(getPubKey ? JSON.parse(getPubKey) : "");
+      setShowMyPairs(getShowMyPairs ? JSON.parse(getShowMyPairs) : false);
       setVersion(getVersion ? JSON.parse(getVersion) : "0.0.0");
       setAmount(getAmount ? JSON.parse(getAmount) : "0.00");
     }
@@ -166,7 +169,11 @@ const Rewards: React.FC = () => {
     setShowFutureRewards(value);
     handleRefreshData();
   }
-
+  function handleSetShowMyPairs(value: boolean) {
+    setShowMyPairs(value);
+    localStorage.setItem("showMyPairs", JSON.stringify(value));
+    handleRefreshData();
+  }
   function handleSetAmount(value: string) {
     setAmount(value);
     localStorage.setItem("amount", JSON.stringify(value));
@@ -402,6 +409,20 @@ const Rewards: React.FC = () => {
                             }
                           />
                         </label>
+                        {publicKey.length === 56 && (
+                          <label className="cursor-pointer label">
+                            <span className="label-text">Show Only My Pairs</span>
+                            <input
+                              type="checkbox"
+                              disabled={!tableInfo}
+                              checked={showMyPairs}
+                              className="toggle toggle-primary"
+                              onChange={(event) =>
+                                handleSetShowMyPairs(event.currentTarget.checked ? true : false)
+                              }
+                            />
+                          </label>
+                        )}
                         <div className="cursor-pointer label">
                           <span className="w-1/4 label-text">Manual Amount</span>
                           <CurrencyInput
@@ -441,6 +462,20 @@ const Rewards: React.FC = () => {
                       }
                     />
                   </label>
+                  {publicKey.length === 56 && (
+                    <label className="cursor-pointer label">
+                      <span className="mr-1 label-text">Show Only My Pairs</span>
+                      <input
+                        type="checkbox"
+                        disabled={!tableInfo || publicKey.length !== 56}
+                        checked={showMyPairs}
+                        className="toggle toggle-primary"
+                        onChange={(event) =>
+                          handleSetShowMyPairs(event.currentTarget.checked ? true : false)
+                        }
+                      />
+                    </label>
+                  )}
                   <div className="cursor-pointer label">
                     <span className="w-1/4 label-text">Manual Amount</span>
                     <CurrencyInput
@@ -485,7 +520,13 @@ const Rewards: React.FC = () => {
                       )}
                       <div className="lg:rounded-lg lg:p-1 bg-base-200">
                         <RewardsTable
-                          data={tableInfo}
+                          data={
+                            !showMyPairs || publicKey.length !== 56
+                              ? tableInfo
+                              : tableInfo.filter(
+                                  (x: { totalValueInvested: number }) => x.totalValueInvested > 0
+                                )
+                          }
                           aquaPrice={
                             assets.assets.find(
                               (asset: { id: string }) =>

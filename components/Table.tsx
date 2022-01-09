@@ -6,6 +6,8 @@ import { useTable, useSortBy, useGroupBy, useExpanded, useRowSelect } from "reac
 import ColorScale from "color-scales";
 import CurrencyInput from "react-currency-input-field";
 
+import ReactTooltip from "react-tooltip";
+
 let cs3Stops = new ColorScale(0, 6, ["#ff5724", "#009485", "#2094f3"]);
 
 // Create an editable cell renderer
@@ -26,6 +28,7 @@ const EditableCell = ({
   // We'll only update the external data when the input is blurred
   const onBlur = () => {
     const delta = value - row.values.totalValueInvested;
+
     //const newPoolValue = delta + row.values.poolValue;
 
     const rewardPerHour = ((value / (delta + row.values.poolValue)) * row.values.dailyReward) / 24;
@@ -49,7 +52,7 @@ const EditableCell = ({
       id="value-input"
       name="value-input"
       prefix="$"
-      className="text-center input-xs input-bordered input"
+      className="w-24 text-center input-xs input-bordered input"
       placeholder="0.00"
       step={10}
       defaultValue={value}
@@ -62,32 +65,58 @@ const EditableCell = ({
 };
 
 // Be sure to pass our updateMyData and the skipReset option
-function Table({ columns, data, updateMyData }: { columns: any; data: any; updateMyData: any }) {
+function Table({
+  columns,
+  data,
+  updateMyData,
+  showDetails
+}: {
+  columns: any;
+  data: any;
+  updateMyData: any;
+  showDetails: any;
+}) {
   const defaultColumn = React.useMemo(
     () => ({
       sortDescFirst: true
     }),
     []
   );
-
+  let prevHiddenColumns: never[] = [];
   // Use the state and functions returned from useTable to build your UI
-  const { getTableProps, getTableBodyProps, headerGroups, footerGroups, prepareRow, rows } =
-    useTable(
-      {
-        columns,
-        data,
-        defaultColumn,
-        updateMyData
-      } as any,
-      useGroupBy,
-      useSortBy,
-      useExpanded,
-      useRowSelect
-    );
+  const {
+    getTableProps,
+    getTableBodyProps,
+    headerGroups,
+    footerGroups,
+    prepareRow,
+    rows,
+    setHiddenColumns
+  } = useTable(
+    {
+      columns,
+      data,
+      defaultColumn,
+      initialState: {
+        hiddenColumns: prevHiddenColumns
+      },
+      updateMyData
+    } as any,
+    useGroupBy,
+    useSortBy,
+    useExpanded,
+    useRowSelect
+  );
+
+  React.useEffect(() => {
+    let hiddenColumns = !showDetails ? ["poolValue", "totalShares", "dailyReward"] : [];
+    setHiddenColumns(hiddenColumns);
+  }, [setHiddenColumns, showDetails]);
 
   // Render the UI for your table
   return (
     <>
+      <ReactTooltip effect="float" place="bottom" className="rounded-md tooltip-primary tooltip" />
       <table
         className="table w-full max-w-6xl mx-auto font-bold table-zebra table-compact"
         {...getTableProps()}>
@@ -97,7 +126,10 @@ function Table({ columns, data, updateMyData }: { columns: any; data: any; updat
               {headerGroup.headers.map((column: any) => (
                 <th {...column.getHeaderProps()}>
                   <div>
-                    <span {...column.getSortByToggleProps()}>
+                    <span
+                      data-tip={column.tip}
+                      className="text-2xs"
+                      {...column.getSortByToggleProps()}>
                       {column.render("Header")}
                       {/* Add a sort direction indicator */}
                       {column.isSorted ? (!column.isSortedDesc ? " ▲" : " ▼") : "⬍"}
@@ -151,7 +183,11 @@ function Table({ columns, data, updateMyData }: { columns: any; data: any; updat
   );
 }
 
-function RewardsTable(props: { aquaPrice: any; data: any }): React.ReactElement {
+function RewardsTable(props: {
+  aquaPrice: any;
+  data: any;
+  showDetails: boolean;
+}): React.ReactElement {
   const [aquaPrice] = React.useState(() => props.aquaPrice);
   const columns = React.useMemo(
     () => [
@@ -190,11 +226,31 @@ function RewardsTable(props: { aquaPrice: any; data: any }): React.ReactElement 
         )
       },
       {
+        Header: "Vote %",
+        Footer: "Vote %",
+        tip: "Current vote percentage for pool",
+        accessor: "votePercentage",
+        Cell: ({ value }: { value: string }) => {
+          let tableStyle = {
+            color: cs3Stops.getColor(parseFloat(value)).toRGBAString()
+          };
+          let tip = parseFloat(value) < 1 ? ">1%" : parseFloat(value) + "%";
+          return (
+            <div
+              data-tip={tip}
+              className="px-1 text-center rounded-md bg-base-300"
+              style={tableStyle}>
+              {parseFloat(value) < 1 ? ">1%" : parseFloat(value).toFixed(1) + "%"}
+            </div>
+          );
+        }
+      },
+      {
         Header: "REWARD PER $",
         Footer: "REWARD PER $",
         accessor: "rewardPerDollar",
         Cell: ({ value }: { value: string }) => (
-          <span className="text-center badge badge-outline">{value} AQUA</span>
+          <div className="text-center badge badge-outline">{value} AQUA</div>
         )
       },
       {
@@ -202,7 +258,7 @@ function RewardsTable(props: { aquaPrice: any; data: any }): React.ReactElement 
         Footer: "REWARD PER $ (DAY)",
         accessor: "rewardPerDollarPerDay",
         Cell: ({ value }: { value: string }) => (
-          <span className="text-center badge badge-outline">{value} AQUA</span>
+          <div className="text-center badge badge-outline">{value} AQUA</div>
         )
       },
 
@@ -253,7 +309,7 @@ function RewardsTable(props: { aquaPrice: any; data: any }): React.ReactElement 
         )
       },
       {
-        Header: "REWARD PER HOUR (USD)",
+        Header: "Hourly Reward",
         accessor: "rewardPerHourUSD",
         Footer: (info: { rows: any[] }) => {
           const total = React.useMemo(
@@ -279,7 +335,7 @@ function RewardsTable(props: { aquaPrice: any; data: any }): React.ReactElement 
         )
       },
       {
-        Header: "REWARD PER Day (USD)",
+        Header: "Daily REWARD",
         accessor: "rewardPerDayUSD",
         Footer: (info: { rows: any[] }) => {
           const total = React.useMemo(
@@ -304,21 +360,7 @@ function RewardsTable(props: { aquaPrice: any; data: any }): React.ReactElement 
           </div>
         )
       },
-      {
-        Header: "Vote %",
-        Footer: "Vote %",
-        accessor: "votePercentage",
-        Cell: ({ value }: { value: string }) => {
-          let tableStyle = {
-            color: cs3Stops.getColor(parseFloat(value)).toRGBAString()
-          };
-          return (
-            <div className="text-right" style={tableStyle}>
-              {parseFloat(value) < 1 ? ">1%" : parseFloat(value).toFixed(2) + "%"}
-            </div>
-          );
-        }
-      },
+
       {
         Header: "Total Shares",
         Footer: "Total Shares",
@@ -379,7 +421,18 @@ function RewardsTable(props: { aquaPrice: any; data: any }): React.ReactElement 
   return (
     <>
       <div className="max-h-screen overflow-y-auto text-9xl lg:max-h-full">
-        <Table columns={columns} data={data} updateMyData={updateMyData} />
+        <ReactTooltip
+          effect="float"
+          place="bottom"
+          className="rounded-md tooltip-primary"
+          backgroundColor="black"
+        />
+        <Table
+          columns={columns}
+          data={data}
+          updateMyData={updateMyData}
+          showDetails={props.showDetails}
+        />
       </div>
     </>
   );

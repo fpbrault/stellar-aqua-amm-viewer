@@ -80,6 +80,7 @@ const Rewards: React.FC = () => {
   const [poolIds, setPoolIds] = useState();
   const [theme, setTheme] = useState("stellar");
   const [showFutureRewards, setShowFutureRewards] = useState(false);
+  const [showDetails, setShowDetails] = useState(false);
   const [showMyPairs, setShowMyPairs] = useState(false);
 
   const connected = async (pubKey: string) => {
@@ -133,11 +134,15 @@ const Rewards: React.FC = () => {
       const getTheme = localStorage.getItem("theme");
       const getVersion = localStorage.getItem("version");
       const getPubKey = localStorage.getItem("publicKey");
+      const getFutureRewards = localStorage.getItem("futureRewards");
+      const getShowDetails = localStorage.getItem("showDetails");
       const getShowMyPairs = localStorage.getItem("showMyPairs");
       const getAmount = localStorage.getItem("amount");
 
       setTheme(getTheme ? JSON.parse(getTheme) : "stellar");
       setPublicKey(getPubKey ? JSON.parse(getPubKey) : "");
+      setShowFutureRewards(getFutureRewards ? JSON.parse(getFutureRewards) : false);
+      setShowDetails(getShowDetails ? JSON.parse(getShowDetails) : false);
       setShowMyPairs(getShowMyPairs ? JSON.parse(getShowMyPairs) : false);
       setVersion(getVersion ? JSON.parse(getVersion) : "0.0.0");
       setAmount(getAmount ? JSON.parse(getAmount) : "0.00");
@@ -167,7 +172,13 @@ const Rewards: React.FC = () => {
   }
   function handleSetShowFutureRewards(value: boolean) {
     setShowFutureRewards(value);
+    localStorage.setItem("futureRewards", JSON.stringify(value));
     handleRefreshData();
+  }
+  function handleSetShowDetails(value: boolean) {
+    setShowDetails(value);
+    localStorage.setItem("showDetails", JSON.stringify(value));
+    //handleRefreshData();
   }
   function handleSetShowMyPairs(value: boolean) {
     setShowMyPairs(value);
@@ -409,6 +420,18 @@ const Rewards: React.FC = () => {
                             }
                           />
                         </label>
+                        <label className="cursor-pointer label">
+                          <span className="label-text">Show Details</span>
+                          <input
+                            type="checkbox"
+                            disabled={!tableInfo}
+                            checked={showDetails}
+                            className="toggle toggle-primary"
+                            onChange={(event) =>
+                              handleSetShowDetails(event.currentTarget.checked ? true : false)
+                            }
+                          />
+                        </label>
                         {publicKey.length === 56 && (
                           <label className="cursor-pointer label">
                             <span className="label-text">Show Only My Pairs</span>
@@ -451,7 +474,7 @@ const Rewards: React.FC = () => {
               <div className="hidden lg:inline">
                 <div className="flex flex-row justify-evenly rounded-xl bg-base-300 text-base-content form-control">
                   <label className="cursor-pointer label">
-                    <span className="pr-1 label-text">Future Rewards</span>
+                    <span className="mr-1 label-text">Future Rewards</span>
                     <input
                       type="checkbox"
                       disabled={!tableInfo}
@@ -459,6 +482,18 @@ const Rewards: React.FC = () => {
                       className="toggle"
                       onChange={(event) =>
                         handleSetShowFutureRewards(event.currentTarget.checked ? true : false)
+                      }
+                    />
+                  </label>
+                  <label className="cursor-pointer label">
+                    <span className="mr-1 label-text ">Show Details</span>
+                    <input
+                      type="checkbox"
+                      disabled={!tableInfo}
+                      checked={showDetails}
+                      className="toggle toggle-primary"
+                      onChange={(event) =>
+                        handleSetShowDetails(event.currentTarget.checked ? true : false)
                       }
                     />
                   </label>
@@ -527,6 +562,7 @@ const Rewards: React.FC = () => {
                                   (x: { totalValueInvested: number }) => x.totalValueInvested > 0
                                 )
                           }
+                          showDetails={showDetails}
                           aquaPrice={
                             assets.assets.find(
                               (asset: { id: string }) =>

@@ -3,7 +3,10 @@
 /* eslint-disable react/jsx-props-no-spreading */
 import React from "react";
 import { useTable, useSortBy, useGroupBy, useExpanded, useRowSelect } from "react-table";
+import ColorScale from "color-scales";
 import CurrencyInput from "react-currency-input-field";
+
+let cs3Stops = new ColorScale(0, 6, ["#ff5724", "#009485", "#2094f3"]);
 
 // Create an editable cell renderer
 const EditableCell = ({
@@ -300,6 +303,21 @@ function RewardsTable(props: { aquaPrice: any; data: any }): React.ReactElement 
             ) : null}
           </div>
         )
+      },
+      {
+        Header: "Vote %",
+        Footer: "Vote %",
+        accessor: "votePercentage",
+        Cell: ({ value }: { value: string }) => {
+          let tableStyle = {
+            color: cs3Stops.getColor(parseFloat(value)).toRGBAString()
+          };
+          return (
+            <div className="text-right" style={tableStyle}>
+              {parseFloat(value) < 1 ? ">1%" : parseFloat(value).toFixed(2) + "%"}
+            </div>
+          );
+        }
       },
       {
         Header: "Total Shares",

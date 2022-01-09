@@ -23,6 +23,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       asset2_code: string;
     };
     daily_amm_reward: number;
+    votePercentage: number;
   };
 
   //res.setHeader("Cache-Control", "s-maxage=60");
@@ -105,6 +106,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         const valuePerShare = poolValue / pool?.data?.total_shares;
 
         let totalValueInvested = 0;
+        let votePercentage = rewardAsset.votePercentage ?? 0;
         let myShares = 0;
         let rewardPerHour = 0;
         let rewardPerHourUsd = 0;
@@ -141,7 +143,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
           rewardPerHourUSD: rewardPerHourUsd,
           rewardPerDayUSD: rewardPerHourUsd * 24,
           totalValueInvested: totalValueInvested,
-          myShares: myShares
+          myShares: myShares,
+          votePercentage: votePercentage.toFixed(2)
         };
       })
     );

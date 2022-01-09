@@ -2,6 +2,22 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.4.0](https://github.com/fpbrault/stellar-aqua-amm-viewer/compare/v0.3.0...v0.4.0) (2022-01-09)
+
+
+### Features
+
+* 🎸 adds toggle to hide pairs without amount ([290e13b](https://github.com/fpbrault/stellar-aqua-amm-viewer/commit/290e13b3ea5d3a4427759f6418ca54854c3932af))
+* 🎸 adds toggle to hide some columns ([fb23f58](https://github.com/fpbrault/stellar-aqua-amm-viewer/commit/fb23f58de63cc75182d8e2b15138cdd3e5caf06c))
+* 🎸 adds vote percentage column ([43a8927](https://github.com/fpbrault/stellar-aqua-amm-viewer/commit/43a89270c3e8c9e1402e825c4f31df857f6f2b47))
+* 🎸 fallback to asset2 value when asset1 value is not found ([19f841d](https://github.com/fpbrault/stellar-aqua-amm-viewer/commit/19f841d6c7874628a59196c7b4463d985e837450))
+
+
+### Bug Fixes
+
+* 🐛 fixed types ([b943826](https://github.com/fpbrault/stellar-aqua-amm-viewer/commit/b94382616e989f8baeb1bbb9c3c64c0738ca4084))
+* 🐛 fixes table not loading when data is missing on a pool ([416cafb](https://github.com/fpbrault/stellar-aqua-amm-viewer/commit/416cafb10cd02f319a825eab39958017d00c5e8f))
+
 ## [0.3.0](https://github.com/fpbrault/stellar-aqua-amm-viewer/compare/v0.2.4...v0.3.0) (2021-12-27)
 
 

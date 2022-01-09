@@ -125,7 +125,14 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         });
 
       res.status(200);
-      const newArr = rewards.results.map(function (asset: any) {
+      const newArr = rewards.results.map(function (asset: {
+        market_key: {
+          asset1_code: string;
+          asset1_issuer: string;
+          asset2_code: string;
+          asset2_issuer: string;
+        };
+      }) {
         const res = futureRewards.results.find(
           (futureReward: {
             asset1_code: string;

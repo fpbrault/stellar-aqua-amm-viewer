@@ -222,6 +222,11 @@ const Rewards: React.FC = () => {
             {"Version " + LIB_VERSION + " - What's new:"}
           </div>
           <ul className="h-full px-4 overflow-auto list-disc max-h-64">
+            <li>Fixes incorrect price for some assets</li>
+            <li>
+              The vote % is now a button that can be clicked to open a graph showing when votes for
+              this pair will unlock
+            </li>
             <li>Added vote percentage column to better track future rewards</li>
             <li>State of future reward toggle kept when reloading page</li>
             <li>Added toggle to hide some extra columns</li>

@@ -2,6 +2,21 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.4.1](https://github.com/fpbrault/stellar-aqua-amm-viewer/compare/v0.4.0...v0.4.1) (2022-01-14)
+
+
+### Features
+
+* 🎸 Add vote unlock chart on vote percentage button ([06db025](https://github.com/fpbrault/stellar-aqua-amm-viewer/commit/06db0251349a14138f676ce7bcc0426f8821d28d))
+* 🎸 updated favicon ([2cd4025](https://github.com/fpbrault/stellar-aqua-amm-viewer/commit/2cd4025643dab23b34cdaee007153098ec54fcea))
+
+
+### Bug Fixes
+
+* 🐛 fixes incorrect price for some pools ([590c310](https://github.com/fpbrault/stellar-aqua-amm-viewer/commit/590c31069b43d25e3185a99b72628e37b7bb9a00))
+* 🐛 fixes type errors ([1edf59e](https://github.com/fpbrault/stellar-aqua-amm-viewer/commit/1edf59ef38d0db42b5c9245e6d9d59c401e5cca0))
+* 🐛 removes stellar-sdk dep to fix libsodium bug ([3d479a6](https://github.com/fpbrault/stellar-aqua-amm-viewer/commit/3d479a6fb5a25ef99189e9898d5011b037e91cb8))
+
 ## [0.4.0](https://github.com/fpbrault/stellar-aqua-amm-viewer/compare/v0.3.0...v0.4.0) (2022-01-09)
 
 

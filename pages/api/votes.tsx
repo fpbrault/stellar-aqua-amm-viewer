@@ -1,7 +1,44 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import * as StellarSdk from "stellar-sdk";
 
-let server = new StellarSdk.Server("https://horizon.stellar.org");
+async function fetchPage(url: string) {
+  const response = await fetch(url, {
+    method: "GET",
+    headers: { "Content-Type": "application/json" }
+  })
+    .then((response) => {
+      if (response.status >= 400 && response.status < 600) {
+        throw new Error(response.statusText);
+      }
+      return response.json();
+    })
+    .catch((error) => {
+      console.error(error);
+    });
+  return response;
+}
+
+async function fetchBalances(poolAccount: string | string[]) {
+  let morePages = true;
+  let resultArray = [];
+  let results = await fetchPage(
+    "https://horizon.stellar.org/claimable_balances/?claimant=" +
+      poolAccount +
+      "&limit=200&order=desc"
+  );
+  resultArray = results._embedded.records;
+
+  while (morePages) {
+    if (results._embedded.records.length === 200) {
+      results = await fetchPage(results._links.next.href);
+      results._embedded.records.forEach((element: any) => {
+        resultArray.push(element);
+      });
+    } else {
+      morePages = false;
+    }
+  }
+  return resultArray;
+}
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse): Promise<void> {
   res.setHeader("Cache-Control", "s-maxage=10");
@@ -9,29 +46,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   const { poolAccount } = req.query;
 
   if (req.method === "GET") {
-    let results: StellarSdk.ServerApi.ClaimableBalanceRecord[][] = [];
-    await server
-      .claimableBalances()
-      .claimant(typeof poolAccount === "string" ? poolAccount : poolAccount[0])
-      .asset(
-        new StellarSdk.Asset("AQUA", "GBNZILSTVQZ4R7IKQDGHYGY2QXL5QOFJYQMXPKWRRM5PAV7Y4M67AQUA")
-      )
-      .limit(200)
-      .order("desc") // so always get the latest one
-      .call()
-      .then(function (page) {
-        results.push(page.records);
-        return page.next();
-      })
-      .then(function (page) {
-        results.push(page.records);
-      })
-      .catch(function (err: string) {
-        console.error(`Claimable balance retrieval failed: ${err}`);
-      });
+    const voteBalances = await fetchBalances(poolAccount);
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const claimableBalances = results[0].map((claimableBalance: any) => {
+    const claimableBalances = voteBalances.map((claimableBalance: any) => {
       const claimant = claimableBalance.claimants.find(
         (claimant: { destination: string | string[] }) => claimant.destination !== poolAccount
       );
@@ -45,13 +63,13 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       };
     });
     type ClaimableBalancesResponse = {
-      amount: number;
+      amount: string;
       account: string;
       date: number;
       type: string;
     };
     const newArr = claimableBalances
-      .map((item) => {
+      .map((item: { amount: number; account: string; created: number; expiration: number }) => {
         return {
           amount: item.amount,
           account: item.account,
@@ -60,23 +78,27 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         };
       })
       .concat(
-        claimableBalances.map((item) => {
-          return {
-            amount: "-" + item.amount,
-            account: item.account,
-            date: item.expiration,
-            type: "endLock"
-          };
-        })
+        claimableBalances.map(
+          (item: { amount: number; account: string; created: number; expiration: number }) => {
+            return {
+              amount: "-" + item.amount,
+              account: item.account,
+              date: item.expiration,
+              type: "endLock"
+            };
+          }
+        )
       );
-    const sortedByDate = newArr.sort((a, b) => {
-      const a2 = a as unknown as ClaimableBalancesResponse;
-      const b2 = b as unknown as ClaimableBalancesResponse;
-      return a2.date - b2.date;
-    });
+    const sortedByDate = newArr.sort(
+      (a: ClaimableBalancesResponse, b: ClaimableBalancesResponse) => {
+        const a2 = a;
+        const b2 = b;
+        return a2.date - b2.date;
+      }
+    );
 
     let voteTotal = 0;
-    sortedByDate.forEach((claimableBalance) => {
+    sortedByDate.forEach((claimableBalance: ClaimableBalancesResponse) => {
       if (claimableBalance.type === "startLock") {
         voteTotal = voteTotal + parseInt(claimableBalance.amount);
       }
@@ -91,7 +113,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     let unlockedInOneMonthOrLess = 0;
 
     const currTime = new Date().getTime();
-    sortedByDate.forEach((claimableBalance) => {
+    sortedByDate.forEach((claimableBalance: ClaimableBalancesResponse) => {
       if (claimableBalance.type === "endLock") {
         if (claimableBalance.date - currTime < 0) {
           unlockedNow = unlockedNow + -parseInt(claimableBalance.amount);

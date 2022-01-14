@@ -5,10 +5,9 @@ import React from "react";
 import { useTable, useSortBy, useGroupBy, useExpanded, useRowSelect } from "react-table";
 import ColorScale from "color-scales";
 import CurrencyInput from "react-currency-input-field";
+import PoolModal from "./PoolModal";
 
 import ReactTooltip from "react-tooltip";
-
-let cs3Stops = new ColorScale(0, 6, ["#ff5724", "#009485", "#2094f3"]);
 
 // Create an editable cell renderer
 const EditableCell = ({
@@ -230,18 +229,12 @@ function RewardsTable(props: {
         Footer: "Vote %",
         tip: "Current vote percentage for pool",
         accessor: "votePercentage",
-        Cell: ({ value }: { value: string }) => {
-          let tableStyle = {
-            color: cs3Stops.getColor(parseFloat(value)).toRGBAString()
-          };
-          let tip = parseFloat(value) < 1 ? ">1%" : parseFloat(value) + "%";
+        Cell: ({ value, row }: any) => {
           return (
-            <div
-              data-tip={tip}
-              className="px-1 text-center rounded-md bg-base-300"
-              style={tableStyle}>
-              {parseFloat(value) < 1 ? ">1%" : parseFloat(value).toFixed(1) + "%"}
-            </div>
+            <PoolModal
+              voteValue={value}
+              poolId={row.original.poolId}
+              poolAccount={row.original.voteAccount}></PoolModal>
           );
         }
       },

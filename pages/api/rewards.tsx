@@ -98,7 +98,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
               ((reward.votes_value / totalEligibleVotes) * 7000000).toFixed(0)
             ),
             last_updated: reward.timestamp,
-            votePercentage: (reward.votes_value / stats.votes_value_sum) * 100
+            votePercentage: (reward.votes_value / stats.votes_value_sum) * 100,
+            voteAccount: asset.account_id
           };
         }
       );
@@ -154,7 +155,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         );
         return {
           ...asset,
-          votePercentage: res ? (reward.votes_value / stats.votes_value_sum) * 100 : 0
+          votePercentage: res ? (reward.votes_value / stats.votes_value_sum) * 100 : 0,
+          voteAccount: res?.account_id
         };
       });
 

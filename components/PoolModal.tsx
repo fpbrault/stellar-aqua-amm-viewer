@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import Modal from "react-overlays/Modal";
 import styled from "styled-components";
 import ColorScale from "color-scales";
-import useSWR, { useSWRConfig } from "swr";
+import useSWR from "swr";
 import VoteChart from "./VoteChart";
 
 const cs3Stops = new ColorScale(0, 6, ["#ff5724", "#009485", "#2094f3"]);
@@ -17,14 +17,6 @@ const Backdrop = styled("div")`
   right: 0;
   background-color: #000;
   opacity: 0.5; */
-`;
-
-const RandomlyPositionedModal = styled(Modal)`
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vh;
-  z-index: 1040;
 `;
 
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
@@ -43,7 +35,8 @@ function PoolModal(props: {
     }
   );
   const value = props.voteValue;
-  const renderBackdrop = (props) => <Backdrop onClick={() => setShow(false)} {...props} />;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const renderBackdrop = (props: any) => <Backdrop onClick={() => setShow(false)} {...props} />;
 
   const tableStyle = {
     color: cs3Stops.getColor(parseFloat(value)).toRGBAString()

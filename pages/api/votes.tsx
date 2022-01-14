@@ -30,9 +30,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         console.error(`Claimable balance retrieval failed: ${err}`);
       });
 
-    const claimableBalances = results[0].map((claimableBalance) => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const claimableBalances = results[0].map((claimableBalance: any) => {
       const claimant = claimableBalance.claimants.find(
-        (claimant) => claimant.destination !== poolAccount
+        (claimant: { destination: string | string[] }) => claimant.destination !== poolAccount
       );
       return {
         amount: claimableBalance.amount,
@@ -46,8 +47,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     type ClaimableBalancesResponse = {
       amount: number;
       account: string;
-      created: number;
-      expiration: number;
+      date: number;
+      type: string;
     };
     const newArr = claimableBalances
       .map((item) => {

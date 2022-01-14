@@ -1,17 +1,18 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React from "react";
 import dynamic from "next/dynamic";
 const ApexCharts = dynamic(() => import("react-apexcharts"), { ssr: false });
 
-type MyProps = { data: any };
+type MyProps = { data: any[] };
 type MyState = { options: any; series: any };
 
 class VoteChart extends React.Component<MyProps, MyState> {
   constructor(props: MyProps | Readonly<MyProps>) {
     super(props);
-    const seriesData = props.data.map((item) => {
+    const seriesData = props.data.map((item: { data: { percent: number } }) => {
       return item.data.percent.toFixed(2);
     });
-    const categories = props.data.map((item) => {
+    const categories = props.data.map((item: { name: string }) => {
       return item.name;
     });
 
@@ -42,7 +43,7 @@ class VoteChart extends React.Component<MyProps, MyState> {
           min: 0,
           max: 100,
           labels: {
-            formatter: function (y) {
+            formatter: function (y: number) {
               return y.toFixed(0) + "%";
             }
           },

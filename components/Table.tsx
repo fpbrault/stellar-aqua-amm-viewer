@@ -3,7 +3,6 @@
 /* eslint-disable react/jsx-props-no-spreading */
 import React from "react";
 import { useTable, useSortBy, useGroupBy, useExpanded, useRowSelect } from "react-table";
-import ColorScale from "color-scales";
 import CurrencyInput from "react-currency-input-field";
 import PoolModal from "./PoolModal";
 

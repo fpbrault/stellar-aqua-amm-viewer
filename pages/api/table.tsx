@@ -24,6 +24,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     };
     daily_amm_reward: number;
     votePercentage: number;
+    voteAccount: string;
   };
 
   //res.setHeader("Cache-Control", "s-maxage=60");
@@ -91,9 +92,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
               ? dailyReward / 24 / (pool?.data.reserves[0].amount * 2 * (asset1_value ?? 0))
               : 0;
           } else if (asset2_value) {
-            poolValue = pool?.data.reserves[0].amount * 2 * (asset2_value ?? 0);
+            poolValue = pool?.data.reserves[1].amount * 2 * (asset2_value ?? 0);
             rewardPerDollar = asset2_value
-              ? dailyReward / 24 / (pool?.data.reserves[0].amount * 2 * (asset2_value ?? 0))
+              ? dailyReward / 24 / (pool?.data.reserves[1].amount * 2 * (asset2_value ?? 0))
               : 0;
           } else {
             poolValue = 0;
@@ -144,7 +145,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
           rewardPerDayUSD: rewardPerHourUsd * 24,
           totalValueInvested: totalValueInvested,
           myShares: myShares,
-          votePercentage: votePercentage.toFixed(2)
+          votePercentage: votePercentage.toFixed(2),
+          voteAccount: rewardAsset.voteAccount
         };
       })
     );

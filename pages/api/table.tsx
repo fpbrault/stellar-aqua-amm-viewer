@@ -27,6 +27,28 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     voteAccount: string;
   };
 
+  async function fetchPrice(id: string) {
+
+    const issuer = id.split("-")[1];
+    const code = id.split("-")[0];
+    const url = "https://horizon.stellar.org/paths/strict-send?destination_assets=USDC%3AGA5ZSEJYB37JRC5AVCIA5MOP4RHTM335X2KGX3IHOJAPP5RE34K4KZVN&source_asset_type=" + (code.length <= 4 ? "credit_alphanum4" : "credit_alphanum12") + "&source_asset_issuer=" + issuer + "&source_asset_code=" + code + "&source_amount=1"
+
+    const response = await fetch(url, {
+      method: "GET",
+      headers: { "Content-Type": "application/json" }
+    })
+      .then((response) => {
+        if (response.status >= 400 && response.status < 600) {
+          throw new Error(response.statusText);
+        }
+        return response.json();
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+    return response?._embedded.records[0]?.destination_amount;
+  }
+
   //res.setHeader("Cache-Control", "s-maxage=60");
 
   if (req.method === "POST") {
@@ -72,7 +94,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
         const dailyReward = rewardAsset.daily_amm_reward;
 
-        const asset1_value = assets.find(
+        let asset1_value = assets.find(
           (asset: { id: string }) =>
             asset.id === (asset1.display === "XLM" ? "XLM-native" : asset1.display)
         )?.price_USD;
@@ -81,6 +103,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
           (asset: { id: string }) =>
             asset.id === (asset2.display === "XLM" ? "XLM-native" : asset2.display)
         )?.price_USD;
+
+        if (asset1_value === undefined && asset2_value === undefined) {
+          asset1_value = await fetchPrice(asset1.display)
+        }
 
         let poolValue;
         let rewardPerDollar;

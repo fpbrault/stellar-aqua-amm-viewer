@@ -113,14 +113,16 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
         if (pool?.data) {
           if (asset1_value) {
-            poolValue = pool?.data.reserves[0].amount * 2 * (asset1_value ?? 0);
+            let asset1_reserves = pool?.data.reserves.find((x: { asset: string; amount: Number }) => x.asset === asset1.id)
+            poolValue = asset1_reserves.amount * 2 * (asset1_value ?? 0);
             rewardPerDollar = asset1_value
-              ? dailyReward / 24 / (pool?.data.reserves[0].amount * 2 * (asset1_value ?? 0))
+              ? dailyReward / 24 / (asset1_reserves.amount * 2 * (asset1_value ?? 0))
               : 0;
           } else if (asset2_value) {
-            poolValue = pool?.data.reserves[1].amount * 2 * (asset2_value ?? 0);
+            let asset2_reserves = pool?.data.reserves.find((x: { asset: string; amount: Number }) => x.asset === asset2.id)
+            poolValue = asset2_reserves.amount * 2 * (asset2_value ?? 0);
             rewardPerDollar = asset2_value
-              ? dailyReward / 24 / (pool?.data.reserves[1].amount * 2 * (asset2_value ?? 0))
+              ? dailyReward / 24 / (asset2_reserves.amount * 2 * (asset2_value ?? 0))
               : 0;
           } else {
             poolValue = 0;

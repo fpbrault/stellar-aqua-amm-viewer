@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import type { NextApiRequest, NextApiResponse } from "next";
 
 async function fetchPage(url: string) {
@@ -22,8 +23,8 @@ async function fetchBalances(poolAccount: string | string[]) {
   let resultArray = [];
   let results = await fetchPage(
     "https://horizon.stellar.org/claimable_balances/?claimant=" +
-      poolAccount +
-      "&limit=200&order=desc"
+    poolAccount +
+    "&limit=200&order=desc"
   );
   resultArray = results._embedded.records;
 
@@ -45,7 +46,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
   const { poolAccount } = req.query;
 
-  if (req.method === "GET") {
+  if (req.method === "GET" && typeof poolAccount != 'undefined') {
     const voteBalances = await fetchBalances(poolAccount);
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any

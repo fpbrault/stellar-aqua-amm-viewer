@@ -1,6 +1,7 @@
 # stellar-aqua-amm-viewer
 
 Simple tool to see rewards for AMM pairs.
+
 ## Getting Started
 
 First, run the development server:

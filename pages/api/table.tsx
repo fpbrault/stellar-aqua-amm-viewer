@@ -28,10 +28,16 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   };
 
   async function fetchPrice(id: string) {
-
     const issuer = id.split("-")[1];
     const code = id.split("-")[0];
-    const url = "https://horizon.stellar.org/paths/strict-send?destination_assets=USDC%3AGA5ZSEJYB37JRC5AVCIA5MOP4RHTM335X2KGX3IHOJAPP5RE34K4KZVN&source_asset_type=" + (code.length <= 4 ? "credit_alphanum4" : "credit_alphanum12") + "&source_asset_issuer=" + issuer + "&source_asset_code=" + code + "&source_amount=1"
+    const url =
+      "https://horizon.stellar.org/paths/strict-send?destination_assets=USDC%3AGA5ZSEJYB37JRC5AVCIA5MOP4RHTM335X2KGX3IHOJAPP5RE34K4KZVN&source_asset_type=" +
+      (code.length <= 4 ? "credit_alphanum4" : "credit_alphanum12") +
+      "&source_asset_issuer=" +
+      issuer +
+      "&source_asset_code=" +
+      code +
+      "&source_amount=1";
 
     const response = await fetch(url, {
       method: "GET",
@@ -105,7 +111,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         )?.price_USD;
 
         if (asset1_value === undefined && asset2_value === undefined) {
-          asset1_value = await fetchPrice(asset1.display)
+          asset1_value = await fetchPrice(asset1.display);
         }
 
         let poolValue;
@@ -113,13 +119,17 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
         if (pool?.data) {
           if (asset1_value) {
-            let asset1_reserves = pool?.data.reserves.find((x: { asset: string; amount: Number }) => x.asset === asset1.id)
+            let asset1_reserves = pool?.data.reserves.find(
+              (x: { asset: string; amount: number }) => x.asset === asset1.id
+            );
             poolValue = asset1_reserves.amount * 2 * (asset1_value ?? 0);
             rewardPerDollar = asset1_value
               ? dailyReward / 24 / (asset1_reserves.amount * 2 * (asset1_value ?? 0))
               : 0;
           } else if (asset2_value) {
-            let asset2_reserves = pool?.data.reserves.find((x: { asset: string; amount: Number }) => x.asset === asset2.id)
+            let asset2_reserves = pool?.data.reserves.find(
+              (x: { asset: string; amount: number }) => x.asset === asset2.id
+            );
             poolValue = asset2_reserves.amount * 2 * (asset2_value ?? 0);
             rewardPerDollar = asset2_value
               ? dailyReward / 24 / (asset2_reserves.amount * 2 * (asset2_value ?? 0))

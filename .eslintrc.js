@@ -22,21 +22,16 @@ module.exports = {
       }
     }
   },
-  plugins: ["simple-import-sort", "@typescript-eslint", "react", "prettier"],
+  plugins: ["simple-import-sort", "prettier"],
   env: {
     browser: true,
     node: true,
     es2020: true
   },
-  extends: [
-    "next/core-web-vitals",
-    "plugin:@typescript-eslint/eslint-recommended",
-    "plugin:@typescript-eslint/recommended",
-    "eslint:recommended",
-    "plugin:react/recommended",
-    "plugin:jsx-a11y/recommended",
-    "plugin:prettier/recommended" // Make this the last element so prettier config overrides other formatting rules
-  ],
+  extends: ["plugin:@typescript-eslint/recommended",
+  "next",
+  "next/core-web-vitals",
+  "prettier"],
   rules: {
     // suppress errors for missing 'import React' in files
     "react/react-in-jsx-scope": "off",
@@ -45,16 +40,10 @@ module.exports = {
     "react/prop-types": "off",
     "jsx-a11y/anchor-is-valid": "off",
     "react/jsx-props-no-spreading": ["error", { custom: "ignore" }],
-    "prettier/prettier": "error",
     "react/no-unescaped-entities": "off",
     "import/no-cycle": [0, { ignoreExternal: true }],
     "prefer-const": "off",
     // needed because of https://github.com/typescript-eslint/typescript-eslint/blob/master/packages/eslint-plugin/docs/rules/no-use-before-define.md#how-to-use & https://stackoverflow.com/questions/63818415/react-was-used-before-it-was-defined
-    "@typescript-eslint/explicit-module-boundary-types": "off",
-    "no-use-before-define": "off",
-    "@typescript-eslint/no-use-before-define": [
-      "error",
-      { functions: false, classes: false, variables: true }
-    ]
+    "@typescript-eslint/explicit-module-boundary-types": "off"
   }
 };

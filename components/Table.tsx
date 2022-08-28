@@ -117,7 +117,8 @@ function Table({
       <ReactTooltip effect="float" place="bottom" className="rounded-md tooltip-primary tooltip" />
       <table
         className="table w-full max-w-6xl mx-auto font-bold table-zebra table-compact"
-        {...getTableProps()}>
+        {...getTableProps()}
+      >
         <thead>
           {headerGroups.map((headerGroup: any) => (
             <tr className="" {...headerGroup.getHeaderGroupProps()}>
@@ -127,7 +128,8 @@ function Table({
                     <span
                       data-tip={column.tip}
                       className="text-2xs"
-                      {...column.getSortByToggleProps()}>
+                      {...column.getSortByToggleProps()}
+                    >
                       {column.render("Header")}
                       {/* Add a sort direction indicator */}
                       {column.isSorted ? (!column.isSortedDesc ? " ▲" : " ▼") : "⬍"}
@@ -171,7 +173,7 @@ function Table({
           {footerGroups.map((group) => (
             <tr {...group.getFooterGroupProps()}>
               {group.headers.map((column) => (
-                <td {...column.getFooterProps()}>{column.render("Footer")}</td>
+                <td {...column.getFooterProps()}>{column.render("Footer") as React.ReactNode}</td>
               ))}
             </tr>
           ))}
@@ -202,14 +204,16 @@ function RewardsTable(props: {
                 rel="noopener noreferrer"
                 href={
                   "https://stellar.expert/explorer/public/liquidity-pool/" + row.original.poolId
-                }>
+                }
+              >
                 <span className="inline-block pl-1 text-xs transition-colors lg:break-normal hover:text-secondary">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     className="inline-block w-4 h-4 align-top"
                     fill="none"
                     viewBox="0 0 24 24"
-                    stroke="currentColor">
+                    stroke="currentColor"
+                  >
                     <path
                       strokeLinecap="round"
                       strokeLinejoin="round"
@@ -233,7 +237,8 @@ function RewardsTable(props: {
             <PoolModal
               voteValue={value}
               poolId={row.original.poolId}
-              poolAccount={row.original.voteAccount}></PoolModal>
+              poolAccount={row.original.voteAccount}
+            ></PoolModal>
           );
         }
       },

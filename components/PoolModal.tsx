@@ -47,7 +47,8 @@ function PoolModal(props: {
         type="button"
         className="font-bold btn-xs btn btn-ghost modal-button"
         style={tableStyle}
-        onClick={() => setShow(true)}>
+        onClick={() => setShow(true)}
+      >
         {parseFloat(value) < 1 ? ">1%" : parseFloat(value).toFixed(1) + "%"}
       </button>
       <div className="modal">
@@ -58,22 +59,26 @@ function PoolModal(props: {
             show={show}
             onHide={() => setShow(false)}
             renderBackdrop={renderBackdrop}
-            aria-labelledby="modal-label">
+            aria-labelledby="modal-label"
+          >
             <div className="fixed top-0 bottom-0 left-0 right-0 z-50 flex flex-col items-center justify-center p-16 bg-base-300">
               <div className="absolute top-0 right-0 m-2 text-2xl font-bold">
                 <button
                   className="btn btn-ghost btn-outline btn-square btn-sm"
-                  onClick={() => setShow(false)}>
+                  onClick={() => setShow(false)}
+                >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     fill="none"
                     viewBox="0 0 24 24"
-                    className="inline-block w-6 h-6 stroke-current">
+                    className="inline-block w-6 h-6 stroke-current"
+                  >
                     <path
                       strokeLinecap="round"
                       strokeLinejoin="round"
                       strokeWidth="2"
-                      d="M6 18L18 6M6 6l12 12"></path>
+                      d="M6 18L18 6M6 6l12 12"
+                    ></path>
                   </svg>
                 </button>
               </div>

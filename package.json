@@ -12,7 +12,7 @@
     "release": "standard-version"
   },
   "dependencies": {
-    "@albedo-link/intent": "^0.11.2",
+    "@albedo-link/intent": "0.12.0",
     "@albedo-link/signature-verification": "^0.1.2",
     "apexcharts": "3.35.5",
     "color-scales": "^3.0.2",
@@ -50,8 +50,8 @@
     "eslint-plugin-react-hooks": "4.6.0",
     "eslint-plugin-simple-import-sort": "^7.0.0",
     "git-cz": "4.9.0",
-    "husky": "7.0.4",
-    "lint-staged": "12.3.2",
+    "husky": "8.0.1",
+    "lint-staged": "13.0.3",
     "postcss": "8.4.16",
     "prettier": "2.7.1",
     "standard-version": "9.5.0",

@@ -222,18 +222,7 @@ const Rewards: React.FC = () => {
             {"Version " + LIB_VERSION + " - What's new:"}
           </div>
           <ul className="h-full px-4 overflow-auto list-disc max-h-64">
-            <li>Fixes incorrect price for some assets</li>
-            <li>
-              The vote % is now a button that can be clicked to open a graph showing when votes for
-              this pair will unlock
-            </li>
-            <li>Added vote percentage column to better track future rewards</li>
-            <li>State of future reward toggle kept when reloading page</li>
-            <li>Added toggle to hide some extra columns</li>
-            <li>
-              Added toggle to show only pools that have an investment (only used when a public key
-              has been entered)
-            </li>
+            <li>Fixes pool value calculation for some pairs</li>
           </ul>
           <div className="modal-action">
             <button tabIndex={0} className="btn" onClick={() => handleSetVersion()}>
@@ -287,7 +276,7 @@ const Rewards: React.FC = () => {
                     />
 
                     {!publicKey ? (
-                      <div className="o" data-tip="Get Public Key using Albedo Wallet">
+                      <div className="o">
                         <button
                           className="btn btn-circle btn-primary"
                           disabled={!tableInfo}
@@ -348,7 +337,7 @@ const Rewards: React.FC = () => {
 
                       {!publicKey ? (
                         <div
-                          className="flex flex-col w-full max-w-xs py-2 mx-auto "
+                          className="flex flex-col w-full max-w-xs py-2 mx-auto tooltip"
                           data-tip="Get Public Key using Albedo Wallet">
                           <button
                             className="absolute top-0 right-0 rounded-l-none btn btn-sm btn-primary"
@@ -569,8 +558,8 @@ const Rewards: React.FC = () => {
                             !showMyPairs || publicKey.length !== 56
                               ? tableInfo
                               : tableInfo.filter(
-                                  (x: { totalValueInvested: number }) => x.totalValueInvested > 0
-                                )
+                                (x: { totalValueInvested: number }) => x.totalValueInvested > 0
+                              )
                           }
                           showDetails={showDetails}
                           aquaPrice={

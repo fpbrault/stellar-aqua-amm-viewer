@@ -16,7 +16,7 @@
     "@albedo-link/signature-verification": "^0.1.2",
     "apexcharts": "3.35.5",
     "color-scales": "^3.0.2",
-    "daisyui": "1.25.4",
+    "daisyui": "2.24.0",
     "next": "12.2.5",
     "react": "17.0.2",
     "react-apexcharts": "1.4.0",

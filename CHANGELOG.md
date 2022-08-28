@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.4.2](https://github.com/fpbrault/stellar-aqua-amm-viewer/compare/v0.4.1...v0.4.2) (2022-08-28)
+
+
+### Features
+
+* 🎸 upgrade to react 18 ([c9861bf](https://github.com/fpbrault/stellar-aqua-amm-viewer/commit/c9861bfdbd936aba0c02858e24b9b63bc8b89146))
+
+
+### Bug Fixes
+
+* 🐛 fixes pool value calc for some pairs ([50c06a0](https://github.com/fpbrault/stellar-aqua-amm-viewer/commit/50c06a05d864c40bf9e2b7add25928fd7db1db27))
+* 🐛 fixes pools with assets not in stellarterm missing ([1bf6816](https://github.com/fpbrault/stellar-aqua-amm-viewer/commit/1bf68167d79dd2c77252069055b610cf3b02124d))
+
 ### [0.4.1](https://github.com/fpbrault/stellar-aqua-amm-viewer/compare/v0.4.0...v0.4.1) (2022-01-14)
 
 ### Features

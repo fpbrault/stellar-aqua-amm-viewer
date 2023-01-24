@@ -49,7 +49,7 @@ function PoolModal(props: {
         style={tableStyle}
         onClick={() => setShow(true)}
       >
-        {parseFloat(value) < 1 ? ">1%" : parseFloat(value).toFixed(1) + "%"}
+        {parseFloat(value) < .5 ? ">.5%" : parseFloat(value).toFixed(2) + "%"}
       </button>
       <div className="modal">
         <div className="modal-box">

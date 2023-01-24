@@ -18,7 +18,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         console.error(error);
       });
 
-    const rewardThreshold = stats.votes_value_sum * 0.01;
+    const rewardThreshold = stats.votes_value_sum * 0.005;
 
     const votes = await fetch(
       "https://voting-tracker.aqua.network/api/voting-snapshot/top-volume/?limit=50&page=1",
@@ -50,7 +50,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
     const futureRewards = await fetch(
       "https://marketkeys-tracker.aqua.network/api/market-keys/?account_id=" +
-        rewardAssetsList.join("&account_id="),
+      rewardAssetsList.join("&account_id="),
       {
         method: "GET",
         headers: { "Content-Type": "application/json" }
@@ -142,13 +142,13 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             asset2_issuer: string;
           }) =>
             futureReward.asset1_code +
-              futureReward.asset1_issuer +
-              futureReward.asset2_code +
-              futureReward.asset2_issuer ==
+            futureReward.asset1_issuer +
+            futureReward.asset2_code +
+            futureReward.asset2_issuer ==
             asset.market_key.asset1_code +
-              asset.market_key.asset1_issuer +
-              asset.market_key.asset2_code +
-              asset.market_key.asset2_issuer
+            asset.market_key.asset1_issuer +
+            asset.market_key.asset2_code +
+            asset.market_key.asset2_issuer
         );
         const reward = rewardAssets.find(
           (key: { market_key: string }) => key.market_key === res?.account_id

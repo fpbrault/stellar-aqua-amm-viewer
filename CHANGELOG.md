@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.4.3](https://github.com/fpbrault/stellar-aqua-amm-viewer/compare/v0.4.2...v0.4.3) (2023-01-24)
+
+
+### Features
+
+* 🎸 Updated threshold for proposal [#74](https://github.com/fpbrault/stellar-aqua-amm-viewer/issues/74) ([4256df1](https://github.com/fpbrault/stellar-aqua-amm-viewer/commit/4256df15d00ceef80dba7e0bfcec148e785fec43))
+
 ### [0.4.2](https://github.com/fpbrault/stellar-aqua-amm-viewer/compare/v0.4.1...v0.4.2) (2022-08-28)
 
 

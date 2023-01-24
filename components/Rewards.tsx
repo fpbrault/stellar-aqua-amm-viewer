@@ -222,7 +222,8 @@ const Rewards: React.FC = () => {
             {"Version " + LIB_VERSION + " - What's new:"}
           </div>
           <ul className="h-full px-4 overflow-auto list-disc max-h-64">
-            <li>Fixes pool value calculation for some pairs</li>
+            <li>Updated vote threshold due to Proposal #74</li>
+            <li>Round Vote % value to 2 decimal places</li>
           </ul>
           <div className="modal-action">
             <button tabIndex={0} className="btn" onClick={() => handleSetVersion()}>
